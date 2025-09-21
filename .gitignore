@@ -59,14 +59,13 @@ __pycache__/
 # backup/
 
 # 包含 ai.lua 名字的文件（防止 AI 密钥/缓存泄漏）
-*ai.lua
+# *ai.lua
 
 # 工具缓存和配置目录
 .codebuddy/
 .jj/
 .qoder/
 .ruff_cache/
-.codebuddy/
 
 # 临时文件和测试文件
 1
