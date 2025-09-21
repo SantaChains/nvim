@@ -3,7 +3,13 @@
 --- 提供所有文件类型都可用的通用代码模板和快捷方式
 ---
 
-local ls = require "luasnip"
+-- 安全加载luasnip模块
+local ok, ls = pcall(require, "luasnip")
+if not ok then
+  -- 如果luasnip不可用，提供一个空的兼容层
+  return {}
+end
+
 local s = ls.snippet
 local i = ls.insert_node
 local t = ls.text_node
@@ -15,13 +21,29 @@ local types = require "luasnip.util.types"
 
 -- 获取用户名和邮箱（用于文件头部注释）
 local function get_user_info()
-  local handle = io.popen("git config user.name 2>/dev/null || whoami")
-  local name = handle:read("*a"):gsub("%s+$", "")
-  handle:close()
+  -- Windows兼容版本
+  local name = "Unknown"
+  local email = "user@example.com"
   
-  handle = io.popen("git config user.email 2>/dev/null || echo 'user@example.com'")
-  local email = handle:read("*a"):gsub("%s+$", "")
-  handle:close()
+  -- 尝试获取Git配置的用户名
+  local handle = io.popen("git config user.name 2>nul")
+  if handle then
+    local result = handle:read("*a"):gsub("%s+$", "")
+    handle:close()
+    if result ~= "" then
+      name = result
+    end
+  end
+  
+  -- 尝试获取Git配置的邮箱
+  handle = io.popen("git config user.email 2>nul")
+  if handle then
+    local result = handle:read("*a"):gsub("%s+$", "")
+    handle:close()
+    if result ~= "" then
+      email = result
+    end
+  end
   
   return name, email
 end
@@ -30,13 +52,15 @@ local user_name, user_email = get_user_info()
 
 -- 全局snippets选择快捷键
 vim.keymap.set({ "i", "s" }, "<A-n>", function()
-  if ls.choice_active() then ls.change_choice(1) end
+  if ls.choice_active() then 
+    ls.change_choice(1) 
+  end
 end, { silent = true })
 
 -- 全局可用的snippets
 ls.add_snippets("all", {
   -- 时间戳相关
-  s("p3", t "lb-conda default/2023-04-26 python3"),
+  s("p3", t("lb-conda default/2023-04-26 python3")),
   
   s(
     "timestamp",
@@ -171,3 +195,15 @@ ls.add_snippets("all", {
     fmt('console.warn("{}", {});', {i(1, "Warning:"), i(2, "warning")})
   ),
 })
+
+-- 验证代码片段加载成功
+local snippet_count = 0
+for _ in pairs(ls.get_snippets("all")) do
+  snippet_count = snippet_count + 1
+end
+
+if snippet_count > 0 then
+  print(string.format("[luasnip] 成功加载 %d 个全局代码片段", snippet_count))
+else
+  print("[luasnip] 警告：未找到全局代码片段")
+end
