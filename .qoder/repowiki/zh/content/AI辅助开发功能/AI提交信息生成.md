@@ -2,12 +2,20 @@
 
 <cite>
 **本文档中引用的文件**  
-- [essential.lua](file://lua/plugins/essential.lua)
-- [templates.lua](file://lua/core/templates.lua)
-- [keybindings.lua](file://lua/config/keybindings.lua)
-- [options.lua](file://lua/config/options.lua)
-- [init.lua](file://init.lua)
+- [essential.lua](file://lua/plugins/essential.lua) - *AI功能核心配置*
+- [templates.lua](file://lua/core/templates.lua) - *提交信息模板管理*
+- [keybindings.lua](file://lua/config/keybindings.lua) - *键位映射配置*
+- [options.lua](file://lua/config/options.lua) - *用户选项设置*
+- [init.lua](file://init.lua) - *初始化入口*
+- [.qoder/repowiki/zh/content/AI辅助开发功能/AI提交信息生成.md](file://.qoder/repowiki/zh/content/AI辅助开发功能/AI提交信息生成.md) - *新增的文档文件*
 </cite>
+
+## 更新摘要
+**已做更改**  
+- 新增文档来源追踪，包含新创建的wiki文档文件
+- 更新项目结构说明以反映文档组织变化
+- 强化源码引用系统，明确各章节与代码文件的对应关系
+- 保持原有技术细节描述的准确性
 
 ## 目录
 1. [简介](#简介)
@@ -24,7 +32,7 @@
 本文档详细说明在Neogit中集成AI生成提交信息的功能实现。重点解析`essential.lua`中如何监听'a'键操作并调用OpenAI/Claude API分析Git差异内容，生成符合规范的提交消息。涵盖提示词工程设计、多语言支持与用户自定义模板配置方法。提供API密钥管理最佳实践，确保敏感信息不被提交至版本控制。包含失败重试机制、响应缓存与用户反馈确认流程，确保操作安全性。
 
 ## 项目结构
-项目采用标准的Neovim配置结构，核心功能模块化组织。AI提交信息功能主要由`essential.lua`中的Neogit插件配置驱动，通过键位映射触发AI功能。配置文件分层清晰，`config`目录管理键位与选项，`core`目录包含核心逻辑，`plugins`目录集成第三方插件。
+项目采用标准的Neovim配置结构，核心功能模块化组织。AI提交信息功能主要由`essential.lua`中的Neogit插件配置驱动，通过键位映射触发AI功能。配置文件分层清晰，`config`目录管理键位与选项，`core`目录包含核心逻辑，`plugins`目录集成第三方插件。新增的文档位于`.qoder/repowiki/zh/content/AI辅助开发功能/`目录下，形成独立的知识库体系。
 
 ```mermaid
 graph TB
@@ -41,6 +49,10 @@ subgraph "AI集成"
 neogit --> openai[OpenAI API]
 neogit --> claude[Claude API]
 end
+subgraph "文档体系"
+wiki[AI提交信息生成.md] --> essential
+wiki --> templates
+end
 init --> essential
 keybindings --> essential
 options --> essential
@@ -50,10 +62,7 @@ options --> essential
 - [essential.lua](file://lua/plugins/essential.lua#L492-L568)
 - [init.lua](file://init.lua#L1-L50)
 - [keybindings.lua](file://lua/config/keybindings.lua#L1-L282)
-
-**本节来源**  
-- [essential.lua](file://lua/plugins/essential.lua#L1-L610)
-- [init.lua](file://init.lua#L1-L50)
+- [.qoder/repowiki/zh/content/AI辅助开发功能/AI提交信息生成.md](file://.qoder/repowiki/zh/content/AI辅助开发功能/AI提交信息生成.md)
 
 ## 核心组件
 AI提交信息功能的核心组件包括Neogit插件的AI配置模块、键位映射系统、API密钥管理机制以及用户反馈确认流程。这些组件协同工作，实现从用户触发到AI生成再到提交确认的完整闭环。

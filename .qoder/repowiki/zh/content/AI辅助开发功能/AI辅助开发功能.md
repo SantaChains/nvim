@@ -2,13 +2,21 @@
 
 <cite>
 **本文档引用的文件**  
-- [essential.lua](file://lua/plugins/essential.lua)
-- [quicker.lua](file://lua/plugins/quicker.lua)
-- [snacks.lua](file://lua/plugins/snacks.lua)
+- [essential.lua](file://lua/plugins/essential.lua) - *更新了GLM-4 AI提供商支持*
+- [snacks.lua](file://lua/plugins/snacks.lua) - *启用了图像显示功能*
+- [glm4-config.lua](file://lua/backup/design/glm4-config.lua) - *新增GLM-4配置指南*
 - [lua.json](file://snippets/lua.json)
 - [python.json](file://snippets/python.json)
 - [rust.json](file://snippets/rust.json)
 </cite>
+
+## 更新摘要
+**变更内容**  
+- 新增GLM-4 AI模型配置指南，支持智谱AI服务
+- 更新所有AI功能模块以支持GLM-4提供商
+- 修正snacks.nvim中图像功能的实际启用状态
+- 增强AI功能配置的灵活性与多提供商支持
+- 更新相关架构图以反映GLM-4集成
 
 ## 目录
 1. [简介](#简介)
@@ -21,7 +29,7 @@
 8. [结论](#结论)
 
 ## 简介
-本项目集成了多个AI增强功能，旨在提升Neovim中的开发效率与智能化水平。通过`substitute.nvim`与`grug-far.nvim`实现智能文本替换与全局搜索重构，利用`quicker.lua`中的补全与格式化工具链增强代码生成能力，并通过`snacks.nvim`提供现代化UI支持。此外，Neogit插件集成AI提交信息生成功能，支持多语言与规范风格。所有AI功能均支持主流提供商（OpenAI、DeepSeek、Claude），并可通过环境变量安全配置API密钥。
+本项目集成了多个AI增强功能，旨在提升Neovim中的开发效率与智能化水平。通过`substitute.nvim`与`grug-far.nvim`实现智能文本替换与全局搜索重构，利用`quicker.lua`中的补全与格式化工具链增强代码生成能力，并通过`snacks.nvim`提供现代化UI支持。此外，Neogit插件集成AI提交信息生成功能，支持多语言与规范风格。所有AI功能均支持主流提供商（OpenAI、DeepSeek、Claude、GLM-4），并可通过环境变量安全配置API密钥。本次更新重点增加了对智谱AI GLM-4系列模型的支持，扩展了AI服务的多样性。
 
 ## AI增强的文本替换与全局重构
 
@@ -33,24 +41,27 @@
 
 **核心功能：**
 - 支持普通模式与可视模式下的`s`、`ss`、`S`等替换操作
-- 集成DeepSeek作为默认AI提供商
+- 集成DeepSeek和GLM-4作为AI提供商
 - 启用AI辅助后可自动推荐更合适的变量名、函数名或表达式
 - 替换内容高亮显示，持续500毫秒便于确认
 
 ```mermaid
 flowchart TD
 A[用户输入 s + 文本] --> B{AI功能启用?}
-B --> |是| C[调用DeepSeek API]
-C --> D[获取语义匹配建议]
-D --> E[应用智能替换]
-B --> |否| F[执行普通替换]
-E --> G[高亮显示结果]
-F --> G
-G --> H[完成替换操作]
+B --> |是| C[选择AI提供商]
+C --> |DeepSeek| D[调用DeepSeek API]
+C --> |GLM-4| E[调用GLM-4 API]
+D --> F[获取语义匹配建议]
+E --> F
+F --> G[应用智能替换]
+B --> |否| H[执行普通替换]
+G --> I[高亮显示结果]
+H --> I
+I --> J[完成替换操作]
 ```
 
 **Diagram sources**  
-- [essential.lua](file://lua/plugins/essential.lua#L200-L220)
+- [essential.lua](file://lua/plugins/essential.lua#L200-L220) - *更新了AI提供商选择逻辑*
 
 ### 全局搜索与重构（grug-far.nvim）
 
@@ -61,7 +72,7 @@ G --> H[完成替换操作]
 - 内置Git感知，自动排除`node_modules`、`.git`等无关目录
 - 提供预览窗口（60%宽高）查看替换效果
 - 支持逐项替换（`r`）、全部替换（`R`）、切换AI建议（`a`）
-- AI建议基于DeepSeek模型，温度参数设为0.3以保证稳定性
+- AI建议支持DeepSeek和GLM-4模型，温度参数设为0.3以保证稳定性
 
 ```mermaid
 flowchart TB
@@ -72,19 +83,22 @@ C --> |否| E[扫描所有文件]
 D --> F[执行文本匹配]
 E --> F
 F --> G{AI建议启用?}
-G --> |是| H[调用DeepSeek获取建议]
-G --> |否| I[仅显示匹配项]
-H --> J[展示AI优化建议]
-J --> K[用户选择替换方式]
-I --> K
-K --> L[执行替换操作]
+G --> |是| H[选择AI提供商]
+H --> |DeepSeek| I[调用DeepSeek获取建议]
+H --> |GLM-4| J[调用GLM-4获取建议]
+I --> K[展示AI优化建议]
+J --> K
+K --> L[用户选择替换方式]
+G --> |否| M[仅显示匹配项]
+L --> N[执行替换操作]
+M --> N
 ```
 
 **Diagram sources**  
-- [essential.lua](file://lua/plugins/essential.lua#L280-L300)
+- [essential.lua](file://lua/plugins/essential.lua#L280-L300) - *更新了AI提供商选择逻辑*
 
 **Section sources**  
-- [essential.lua](file://lua/plugins/essential.lua#L200-L300)
+- [essential.lua](file://lua/plugins/essential.lua#L200-L300) - *更新了AI提供商支持*
 
 ## AI驱动的代码生成与补全
 
@@ -152,7 +166,7 @@ K --> L[最终代码]
 | 缩进引导 | 是 | 可视化缩进指示 |
 | 输入反馈 | 是 | 实时操作提示 |
 | 快速文件创建 | 是 | 提速文件新建流程 |
-| 图像支持 | 否 | 当前禁用图像渲染 |
+| 图像支持 | 是 | 启用图像渲染功能 |
 
 ### 代码片段支持
 
@@ -195,13 +209,13 @@ Editor --> LanguageSnippets : queries
 ```
 
 **Diagram sources**  
-- [snacks.lua](file://lua/plugins/snacks.lua#L1-L24)
+- [snacks.lua](file://lua/plugins/snacks.lua#L1-L24) - *更新了图像支持状态*
 - [lua.json](file://snippets/lua.json#L1-L40)
 - [python.json](file://snippets/python.json#L1-L18)
 - [rust.json](file://snippets/rust.json#L1-L74)
 
 **Section sources**  
-- [snacks.lua](file://lua/plugins/snacks.lua#L1-L24)
+- [snacks.lua](file://lua/plugins/snacks.lua#L1-L24) - *更新了图像支持状态*
 - [snippets/lua.json](file://snippets/lua.json#L1-L40)
 - [snippets/python.json](file://snippets/python.json#L1-L18)
 - [snippets/rust.json](file://snippets/rust.json#L1-L74)
@@ -214,10 +228,10 @@ Editor --> LanguageSnippets : queries
 
 | 功能 | 提供商 | 环境变量 | 示例值 |
 |-----|-------|---------|-------|
-| Neogit提交信息 | OpenAI | `OPENAI_API_KEY` | `sk-...` |
-| substitute.nvim | DeepSeek | `DEEPSEEK_API_KEY` | `sk-...` |
-| grug-far.nvim | DeepSeek | `DEEPSEEK_API_KEY` | `sk-...` |
-| Diffview合并助手 | Claude | `ANTHROPIC_API_KEY` | `sk-...` |
+| Neogit提交信息 | OpenAI/GLM-4 | `OPENAI_API_KEY`/`GLM4_API_KEY` | `sk-...` |
+| substitute.nvim | DeepSeek/GLM-4 | `DEEPSEEK_API_KEY`/`GLM4_API_KEY` | `sk-...` |
+| grug-far.nvim | DeepSeek/GLM-4 | `DEEPSEEK_API_KEY`/`GLM4_API_KEY` | `sk-...` |
+| Diffview合并助手 | Claude/GLM-4 | `ANTHROPIC_API_KEY`/`GLM4_API_KEY` | `sk-...` |
 
 **配置方法：**
 
@@ -226,6 +240,7 @@ Editor --> LanguageSnippets : queries
 $env:OPENAI_API_KEY = "your-key-here"
 $env:DEEPSEEK_API_KEY = "your-key-here"
 $env:ANTHROPIC_API_KEY = "your-key-here"
+$env:GLM4_API_KEY = "your-key-here"
 ```
 
 2. **Windows系统（命令提示符）：**
@@ -233,6 +248,7 @@ $env:ANTHROPIC_API_KEY = "your-key-here"
 set OPENAI_API_KEY=your-key-here
 set DEEPSEEK_API_KEY=your-key-here
 set ANTHROPIC_API_KEY=your-key-here
+set GLM4_API_KEY=your-key-here
 ```
 
 3. **永久配置：** 将上述变量添加到系统环境变量中。
@@ -255,17 +271,39 @@ opts = {
 支持在配置中更改AI提供商（需确保API兼容）：
 
 ```lua
--- 例如将grug-far从deepseek切换到openai
+-- 例如将grug-far从deepseek切换到glm4
 opts = {
   ai = {
-    provider = 'openai',  -- 修改此处
-    api_key = os.getenv('OPENAI_API_KEY')
+    provider = 'glm4',  -- 修改此处
+    api_key = os.getenv('GLM4_API_KEY')
+  }
+}
+```
+
+### GLM-4专用配置
+
+新增GLM-4专用配置选项，支持智谱AI服务：
+
+```lua
+-- GLM-4配置示例
+opts = {
+  ai = {
+    glm4 = {
+      enabled = true,
+      provider = 'glm4',
+      api_key = os.getenv('GLM4_API_KEY') or '',
+      api_url = 'https://open.bigmodel.cn/api/paas/v4',
+      model = 'glm-4-flash',
+      temperature = 0.3,
+      max_tokens = 2048,
+    }
   }
 }
 ```
 
 **Section sources**  
-- [essential.lua](file://lua/plugins/essential.lua#L200-L300)
+- [essential.lua](file://lua/plugins/essential.lua#L200-L300) - *更新了GLM-4配置支持*
+- [glm4-config.lua](file://lua/backup/design/glm4-config.lua) - *新增GLM-4配置文件*
 
 ## 使用场景示例
 
@@ -275,7 +313,7 @@ opts = {
 1. 打开Neogit界面：`<leader>gg`
 2. 选择待提交文件
 3. 按下`a`键触发AI提交信息生成
-4. 系统调用OpenAI分析变更内容
+4. 系统调用OpenAI或GLM-4分析变更内容
 5. 生成符合规范的中文提交信息（风格：conventional）
 
 **优势：**
@@ -331,7 +369,7 @@ Editor-->>User : 完成提示
 ```
 
 **Diagram sources**  
-- [essential.lua](file://lua/plugins/essential.lua#L200-L220)
+- [essential.lua](file://lua/plugins/essential.lua#L200-L220) - *更新了AI提供商选择逻辑*
 
 ## 安全提示与性能考量
 
@@ -341,6 +379,7 @@ Editor-->>User : 完成提示
 - **数据隐私**：敏感项目建议禁用AI功能或使用本地模型
 - **供应商选择**：评估各AI提供商的数据处理政策
 - **功能审计**：定期审查AI生成代码的准确性与安全性
+- **多提供商策略**：建议配置多个AI提供商以实现冗余和故障转移
 
 ### 性能优化建议
 
@@ -348,6 +387,7 @@ Editor-->>User : 完成提示
 - **缓存机制**：对重复模式可手动创建片段避免频繁调用API
 - **按需启用**：非必要时不开启AI功能以减少资源消耗
 - **超时设置**：长时间无响应时可手动取消操作
+- **提供商选择**：GLM-4模型在中文处理上具有优势，建议中文场景优先使用
 
 ### 资源占用
 
@@ -361,9 +401,9 @@ Editor-->>User : 完成提示
 建议在低配设备上优先使用本地功能，AI功能按需调用。
 
 **Section sources**  
-- [essential.lua](file://lua/plugins/essential.lua#L200-L300)
+- [essential.lua](file://lua/plugins/essential.lua#L200-L300) - *更新了AI提供商支持*
 - [quicker.lua](file://lua/plugins/quicker.lua#L1-L290)
 
 ## 结论
 
-本项目通过`essential.lua`、`quicker.lua`和`snacks.lua`三个核心模块，构建了完整的AI辅助开发体系。实现了从智能替换、全局重构到代码生成、片段补全的全流程增强。通过标准化的API密钥管理与灵活的配置选项，确保了功能的安全性与可扩展性。建议用户根据实际需求合理配置AI功能，在提升效率的同时注意数据安全与性能平衡。
+本项目通过`essential.lua`、`quicker.lua`和`snacks.lua`三个核心模块，构建了完整的AI辅助开发体系。实现了从智能替换、全局重构到代码生成、片段补全的全流程增强。通过标准化的API密钥管理与灵活的配置选项，确保了功能的安全性与可扩展性。本次更新重点增加了对智谱AI GLM-4系列模型的支持，为用户提供更多AI服务选择，特别是在中文处理场景下表现更优。建议用户根据实际需求合理配置AI功能，在提升效率的同时注意数据安全与性能平衡。
