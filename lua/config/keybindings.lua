@@ -94,6 +94,47 @@ end, {desc = "🔄 重载配置"})
 keymap.set("n", "<leader>Ch", cmd.checkhealth, {desc = "⚙️ 健康检查"})
 keymap.set("n", "<leader>Cm", cmd.Mason, {desc = "⚙️ Mason管理器"})
 
+-- ===== 注释生成组 (<leader>n) =====
+keymap.set("n", "<leader>nf", function()
+  if has_plugin("neogen") then
+    require("neogen").generate({ type = "func" })
+  else
+    vim.notify("需要安装 neogen", vim.log.levels.WARN)
+  end
+end, {desc = "📝 生成函数注释"})
+
+keymap.set("n", "<leader>nc", function()
+  if has_plugin("neogen") then
+    require("neogen").generate({ type = "class" })
+  else
+    vim.notify("需要安装 neogen", vim.log.levels.WARN)
+  end
+end, {desc = "📝 生成类注释"})
+
+keymap.set("n", "<leader>nt", function()
+  if has_plugin("neogen") then
+    require("neogen").generate({ type = "type" })
+  else
+    vim.notify("需要安装 neogen", vim.log.levels.WARN)
+  end
+end, {desc = "📝 生成类型注释"})
+
+keymap.set("n", "<leader>nd", function()
+  if has_plugin("neogen") then
+    require("neogen").generate({ type = "file" })
+  else
+    vim.notify("需要安装 neogen", vim.log.levels.WARN)
+  end
+end, {desc = "📝 生成文件注释"})
+
+keymap.set("n", "<leader>na", function()
+  if has_plugin("neogen") then
+    require("neogen").generate()
+  else
+    vim.notify("需要安装 neogen", vim.log.levels.WARN)
+  end
+end, {desc = "📝 智能生成注释"})
+
 -- ===== 通知管理组 (<leader>N) =====
 keymap.set("n", "<leader>Nh", function()
   if has_plugin("telescope") then

@@ -1,3 +1,9 @@
+---
+--- Python代码片段配置文件
+--- 提供Python开发中常用的代码模板和快捷方式
+--- 包括现代Python特性、数据科学、Web开发等
+---
+
 local ls = require 'luasnip'
 local s = ls.snippet
 local i = ls.insert_node
@@ -197,6 +203,384 @@ df = ROOT.RDataFrame("{}", file_list)
     fmt('os.path.exists({file})', {
       file = i(1),
     })
+  ),
+  
+  -- ╭─────────────────────────────────────────────────────────╮
+  -- │                    现代Python特性                        │
+  -- ╰─────────────────────────────────────────────────────────╯
+  
+  -- 类型注解函数
+  s(
+    'def_typed',
+    fmt(
+      [[
+def {}({}) -> {}:
+    """{}"""
+    {}
+    return {}
+      ]],
+      {
+        i(1, 'function_name'),
+        i(2, 'param: type'),
+        i(3, 'ReturnType'),
+        i(4, 'Function description'),
+        i(5, 'pass'),
+        i(6, 'None')
+      }
+    )
+  ),
+  
+  -- 异步函数
+  s(
+    'async_def',
+    fmt(
+      [[
+async def {}({}) -> {}:
+    """{}"""
+    {}
+    return {}
+      ]],
+      {
+        i(1, 'function_name'),
+        i(2, 'param: type'),
+        i(3, 'ReturnType'),
+        i(4, 'Async function description'),
+        i(5, 'await some_async_operation()'),
+        i(6, 'result')
+      }
+    )
+  ),
+  
+  -- 数据类
+  s(
+    'dataclass',
+    fmt(
+      [[
+from dataclasses import dataclass
+
+@dataclass
+class {}:
+    {}: {}
+    {}: {}
+      ]],
+      {
+        i(1, 'ClassName'),
+        i(2, 'field1'),
+        i(3, 'type1'),
+        i(4, 'field2'),
+        i(5, 'type2')
+      }
+    )
+  ),
+  
+  -- Pydantic模型
+  s(
+    'pydantic',
+    fmt(
+      [[
+from pydantic import BaseModel
+
+class {}(BaseModel):
+    {}: {}
+    {}: {}
+      ]],
+      {
+        i(1, 'ModelName'),
+        i(2, 'field1'),
+        i(3, 'type1'),
+        i(4, 'field2'),
+        i(5, 'type2')
+      }
+    )
+  ),
+  
+  -- 枚举类
+  s(
+    'enum',
+    fmt(
+      [[
+from enum import Enum
+
+class {}(Enum):
+    {} = {}
+    {} = {}
+      ]],
+      {
+        i(1, 'EnumName'),
+        i(2, 'VALUE1'),
+        i(3, '1'),
+        i(4, 'VALUE2'),
+        i(5, '2'
+        )
+      }
+    )
+  ),
+  
+  -- 上下文管理器
+  s(
+    'contextmanager',
+    fmt(
+      [[
+from contextlib import contextmanager
+
+@contextmanager
+def {}({}):
+    """{}"""
+    try:
+        {}
+        yield {}
+    finally:
+        {}
+      ]],
+      {
+        i(1, 'manager_name'),
+        i(2, 'param: type'),
+        i(3, 'Context manager description'),
+        i(4, '# setup code'),
+        i(5, 'resource'),
+        i(6, '# cleanup code')
+      }
+    )
+  ),
+  
+  -- ╭─────────────────────────────────────────────────────────╮
+  -- │                    数据处理与科学计算                      │
+  -- ╰─────────────────────────────────────────────────────────╯
+  
+  -- NumPy数组创建
+  s(
+    'numpy_array',
+    fmt(
+      [[
+import numpy as np
+
+{} = np.array([{}])
+      ]],
+      {
+        i(1, 'arr'),
+        i(2, '1, 2, 3, 4, 5')
+      }
+    )
+  ),
+  
+  -- Pandas DataFrame
+  s(
+    'pandas_df',
+    fmt(
+      [[
+import pandas as pd
+
+{} = pd.DataFrame({{
+    '{}': [{}],
+    '{}': [{}]
+}})
+      ]],
+      {
+        i(1, 'df'),
+        i(2, 'column1'),
+        i(3, '1, 2, 3'),
+        i(4, 'column2'),
+        i(5, '4, 5, 6')
+      }
+    )
+  ),
+  
+  -- Matplotlib绘图
+  s(
+    'matplotlib_plot',
+    fmt(
+      [[
+import matplotlib.pyplot as plt
+
+plt.figure(figsize=({}, {}))
+plt.plot({}, {}, label='{}')
+plt.xlabel('{}')
+plt.ylabel('{}')
+plt.title('{}')
+plt.legend()
+plt.grid(True)
+plt.show()
+      ]],
+      {
+        i(1, '8'),
+        i(2, '6'),
+        i(3, 'x'),
+        i(4, 'y'),
+        i(5, 'data'),
+        i(6, 'X Label'),
+        i(7, 'Y Label'),
+        i(8, 'Plot Title')
+      }
+    )
+  ),
+  
+  -- ╭─────────────────────────────────────────────────────────╮
+  -- │                    Web开发与API                           │
+  -- ╰─────────────────────────────────────────────────────────╯
+  
+  -- FastAPI路由
+  s(
+    'fastapi_route',
+    fmt(
+      [[
+from fastapi import FastAPI
+
+app = FastAPI()
+
+@app.{}('{}')
+async def {}({}):
+    """{}"""
+    return {{'{}': {}}}
+      ]],
+      {
+        i(1, 'get'),
+        i(2, '/path'),
+        i(3, 'function_name'),
+        i(4, 'param: type'),
+        i(5, 'Route description'),
+        i(6, 'message'),
+        i(7, '"Hello World"')
+      }
+    )
+  ),
+  
+  -- Flask路由
+  s(
+    'flask_route',
+    fmt(
+      [[
+from flask import Flask, jsonify
+
+app = Flask(__name__)
+
+@app.route('{}', methods=['{}'])
+def {}({}):
+    """{}"""
+    return jsonify({{'{}': {}}})
+
+if __name__ == '__main__':
+    app.run(debug=True)
+      ]],
+      {
+        i(1, '/path'),
+        i(2, 'GET'),
+        i(3, 'function_name'),
+        i(4, ''),
+        i(5, 'Route description'),
+        i(6, 'message'),
+        i(7, '"Hello World"')
+      }
+    )
+  ),
+  
+  -- ╭─────────────────────────────────────────────────────────╮
+  -- │                    错误处理与日志                          │
+  -- ╰─────────────────────────────────────────────────────────╯
+  
+  -- 异常处理
+  s(
+    'try_except',
+    fmt(
+      [[
+try:
+    {}
+except {} as e:
+    print(f"Error: {{e}}")
+    {}
+      ]],
+      {
+        i(1, '# Code that might raise an exception'),
+        i(2, 'Exception'),
+        i(3, '# Handle exception')
+      }
+    )
+  ),
+  
+  -- 日志配置
+  s(
+    'logging_setup',
+    fmt(
+      [[
+import logging
+
+logging.basicConfig(
+    level=logging.{},
+    format='%(asctime)s - %(name)s - %(levelname)s - %(message)s',
+    handlers=[
+        logging.FileHandler('{}.log'),
+        logging.StreamHandler()
+    ]
+)
+
+logger = logging.getLogger(__name__)
+      ]],
+      {
+        i(1, 'INFO'),
+        i(2, 'app')
+      }
+    )
+  ),
+  
+  -- ╭─────────────────────────────────────────────────────────╮
+  -- │                    测试相关                              │
+  -- ╰─────────────────────────────────────────────────────────╯
+  
+  -- pytest测试函数
+  s(
+    'pytest_function',
+    fmt(
+      [[
+def test_{}():
+    """Test {} functionality"""
+    # Arrange
+    {}
+    
+    # Act
+    {}
+    
+    # Assert
+    {}
+      ]],
+      {
+        i(1, 'function_name'),
+        i(2, 'function'),
+        i(3, 'input_data = ...'),
+        i(4, 'result = function(input_data)'),
+        i(5, 'assert result == expected_output')
+      }
+    )
+  ),
+  
+  -- unittest测试类
+  s(
+    'unittest_class',
+    fmt(
+      [[
+import unittest
+
+class Test{}(unittest.TestCase):
+    def setUp(self):
+        {}
+    
+    def test_{}(self):
+        """Test {}"""
+        {}
+        self.assert{}({}, {})
+
+if __name__ == '__main__':
+    unittest.main()
+      ]],
+      {
+        i(1, 'ClassName'),
+        i(2, '# Setup code'),
+        i(3, 'method_name'),
+        i(4, 'method description'),
+        i(5, '# Test code'),
+        i(6, 'Equal'),
+        i(7, 'actual'),
+        i(8, 'expected')
+      }
+    )
   ),
   s(
     'yearpol',

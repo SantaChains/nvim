@@ -38,7 +38,7 @@ return {
         })
         
         -- 设置快捷键
-        vim.keymap.set("n", "<leader>t", ":TranslateNormal<CR>")
-        vim.keymap.set("v", "<leader>t", ":TranslateVisual<CR>")
+        vim.keymap.set("n", "<leader>", ":TranslateNormal<CR>")
+        vim.keymap.set("v", "<leader>", ":TranslateVisual<CR>")
     end,
 }
