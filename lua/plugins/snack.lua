@@ -36,7 +36,7 @@ return {
 
       sections = {
         { section = "header", gap = 0 },
-        { icon = " ", title = "Keymaps", section = "keys", indent = 2, padding = 1 },
+        { icon = "󰌌 ", title = "Keymaps", section = "keys", indent = 2, padding = 1 },
         { section = "startup" },
         --      {
         --       pane = 2,
@@ -48,15 +48,15 @@ return {
         --       padding = 1,                    
         --     },
         
-        { pane = 2, icon = " ", key = "r", title = "Recent Files", section = "recent_files", indent = 2, padding = 1, action = function() Snacks.picker.recent() end },
+        { pane = 2, icon = "󰋚 ", key = "r", title = "Recent Files", section = "recent_files", indent = 2, padding = 1, action = function() Snacks.picker.recent() end },
         --  { pane =2,icon = " ", key = "r",title = "Recent Files", section = "recent_files", indent = 2, padding = 1,action = function()
         -- Snacks.picker.recent()
         -- vim.api.nvim_feedkeys(vim.api.nvim_replace_termcodes("<Esc>", true, false, true), 'n', false) end},
-        { pane = 2, icon = " ", key = "p", title = "Projects", section = "projects", indent = 2, padding = 1, action = "vim.fn.chdir(project.path)" },
+        { pane = 2, icon = "󰉋 ", key = "p", title = "Projects", section = "projects", indent = 2, padding = 1, action = "vim.fn.chdir(project.path)" },
         
         {
           pane = 2,
-          icon = " ",
+          icon = "󰊤 ",
           desc = "Browse Repo",
           padding = 1,
           key = "b",
