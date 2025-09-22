@@ -54,6 +54,7 @@ require("lazy").setup({
         "tohtml",
         "tutor",
         "zipPlugin",
+        "mini.ai",
       },
     },
   },

@@ -33,7 +33,7 @@ local lsp_mappings = {
   {"pR", vim.lsp.buf.references, "🔧 查找引用"},
   {"ps", vim.lsp.buf.document_symbol, "🔧 文档符号"},
   {"ph", vim.lsp.buf.hover, "🔧 悬停信息"},
-  {"pf", function() vim.lsp.buf.format({async = true}) end, "🔧 格式化"},
+  -- {"pf", function() vim.lsp.buf.format({async = true}) end, "🔧 格式化"}, -- 已移至 conform.lua 统一管理
 }
 
 for _, map in ipairs(lsp_mappings) do
@@ -53,22 +53,22 @@ keymap.set("n", "<leader>xj", function() vim.diagnostic.goto_next({wrap = true})
 keymap.set("n", "<leader>xk", function() vim.diagnostic.goto_prev({wrap = true}) end, {desc = "🔍 上一个诊断"})
 keymap.set("n", "<leader>xe", vim.diagnostic.open_float, {desc = "🔍 诊断详情"})
 
--- ===== Python 调试组 (<leader>py) =====
-keymap.set("n", "<leader>pyb", function()
-  if has_plugin("dap") then
-    require("dap").toggle_breakpoint()
-  else
-    vim.notify("需要安装 nvim-dap", vim.log.levels.WARN)
-  end
-end, {desc = "🐍 切换断点"})
+-- ===== Python 调试组 (<leader>py) ===== (已禁用)
+-- keymap.set("n", "<leader>pyb", function()
+  -- if has_plugin("dap") then
+    -- require("dap").toggle_breakpoint()
+  -- else
+    -- vim.notify("需要安装 nvim-dap", vim.log.levels.WARN)
+  -- end
+-- end, {desc = "🐍 切换断点"})
 
-keymap.set("n", "<leader>pyc", function()
-  if has_plugin("dap") then
-    require("dap").continue()
-  else
-    vim.notify("需要安装 nvim-dap", vim.log.levels.WARN)
-  end
-end, {desc = "🐍 继续执行"})
+-- keymap.set("n", "<leader>pyc", function()
+  -- if has_plugin("dap") then
+    -- require("dap").continue()
+  -- else
+    -- vim.notify("需要安装 nvim-dap", vim.log.levels.WARN)
+  -- end
+-- end, {desc = "🐍 继续执行"})
 
 -- ===== 配置管理组 (<leader>C) =====
 local config_paths = {

@@ -1,0 +1,22 @@
+{
+  "name": "personal-snippets",
+  "contributes": {
+    "snippets": [
+      { "language": "all", "path": "./all.json" },
+      { "language": "lua", "path": "./lua.json" },
+      { "language": "python", "path": "./python.json" },
+      { "language": "cpp", "path": "./cpp.json" },
+      { "language": "rust", "path": "./rust.json" },
+      { "language": "json", "path": "./json.json" },
+      { "language": "markdown", "path": "./markdown.json" },
+      { "language": "html", "path": "./html.json" },
+      { "language": "css", "path": "./css.json" },
+      { "language": "typescript", "path": "./typescript.json" },
+      { "language": "javascript", "path": "./javascript.json" },
+      { "language": "sh", "path": "./sh.json" },
+      { "language": "yaml", "path": "./yaml.json" },
+      { "language": "tex", "path": "./tex.json" },
+      { "language": "typst", "path": "./typst.json" }
+    ]
+  }
+}

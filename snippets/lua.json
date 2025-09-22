@@ -2,5 +2,88 @@
   "disable": {
     "prefix": "disable",
     "body": ["enabled = false,"]
+  },
+  "function": {
+    "prefix": "func",
+    "body": [
+      "local function ${1:function_name}(${2:params})",
+      "  ${3:-- body}",
+      "  return ${4:nil}",
+      "end"
+    ]
+  },
+  "local function": {
+    "prefix": "lfunc",
+    "body": [
+      "local function ${1:name}(${2:params})",
+      "  ${3:-- body}",
+      "end"
+    ]
+  },
+  "if statement": {
+    "prefix": "if",
+    "body": [
+      "if ${1:condition} then",
+      "  ${2:-- body}",
+      "end"
+    ]
+  },
+  "if else statement": {
+    "prefix": "ife",
+    "body": [
+      "if ${1:condition} then",
+      "  ${2:-- body}",
+      "else",
+      "  ${3:-- else body}",
+      "end"
+    ]
+  },
+  "for loop": {
+    "prefix": "for",
+    "body": [
+      "for ${1:i} = ${2:1}, ${3:10} do",
+      "  ${4:-- body}",
+      "end"
+    ]
+  },
+  "for pairs loop": {
+    "prefix": "forp",
+    "body": [
+      "for ${1:key}, ${2:value} in pairs(${3:table}) do",
+      "  ${4:-- body}",
+      "end"
+    ]
+  },
+  "for ipairs loop": {
+    "prefix": "fori",
+    "body": [
+      "for ${1:index}, ${2:value} in ipairs(${3:table}) do",
+      "  ${4:-- body}",
+      "end"
+    ]
+  },
+  "while loop": {
+    "prefix": "while",
+    "body": [
+      "while ${1:condition} do",
+      "  ${2:-- body}",
+      "end"
+    ]
+  },
+  "table": {
+    "prefix": "table",
+    "body": [
+      "local ${1:table_name} = {",
+      "  ${2:key} = ${3:value}",
+      "}"
+    ]
+  },
+  "require": {
+    "prefix": "req",
+    "body": "local ${1:module} = require('${2:module_name}')"
+  },
+  "print": {
+    "prefix": "print",
+    "body": "print('${1:message}')"
   }
 }

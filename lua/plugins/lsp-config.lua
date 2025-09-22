@@ -187,6 +187,14 @@ return {
                   useLibraryCodeForTypes = true,
                   autoImportCompletions = true,
                   diagnosticMode = "openFilesOnly",
+                  completeFunctionParens = true,
+                  indexing = true,
+                  inlayHints = {
+                    variableTypes = true,
+                    functionReturnTypes = true,
+                  },
+                  autoImportCompletions = true,
+                  importFormat = "absolute",
                 },
               },
             },
@@ -277,12 +285,25 @@ return {
               textDocument = {
                 completion = {
                   editsNearCursor = true,
+                  completionItem = {
+                    snippetSupport = true,
+                  },
                 },
                 formatting = {
                   dynamicRegistration = true,     -- 显式开启格式化能力
                 },
               },
               offsetEncoding = { "utf-8", "utf-16" },
+            },
+            settings = {
+              clangd = {
+                arguments = {
+                  "--header-insertion=iwyu",
+                  "--completion-style=detailed",
+                  "--function-arg-placeholders",
+                  "--fallback-style=llvm",
+                },
+              },
             },
             root_dir = function(fname)
               local util = require('lspconfig.util')
@@ -308,6 +329,33 @@ return {
                   includeInlayFunctionParameterTypeHints = true,
                   includeInlayVariableTypeHints = true,
                 },
+                suggest = {
+                  autoImports = true,
+                  includeCompletionsForModuleExports = true,
+                  includeCompletionsWithSnippetText = true,
+                  includeAutomaticOptionalChainCompletions = true,
+                  providePrefixAndSuffixTextForRename = true,
+                },
+                completion = {
+                  completeFunctionCalls = true,
+                },
+              },
+              javascript = {
+                inlayHints = {
+                  includeInlayParameterNameHints = "all",
+                  includeInlayFunctionParameterTypeHints = true,
+                  includeInlayVariableTypeHints = true,
+                },
+                suggest = {
+                  autoImports = true,
+                  includeCompletionsForModuleExports = true,
+                  includeCompletionsWithSnippetText = true,
+                  includeAutomaticOptionalChainCompletions = true,
+                  providePrefixAndSuffixTextForRename = true,
+                },
+                completion = {
+                  completeFunctionCalls = true,
+                },
               },
             },
           },
@@ -322,6 +370,16 @@ return {
                   chainingHints = { enable = true },
                   parameterHints = { enable = true },
                   typeHints = { enable = true },
+                },
+                completion = {
+                  addCallParenthesis = true,
+                  addCallArgumentSnippets = true,
+                  postfix = { enable = true },
+                  autoimport = { enable = true },
+                },
+                assist = {
+                  importGranularity = "module",
+                  importPrefix = "by_self",
                 },
               },
             },
@@ -523,9 +581,10 @@ return {
             vim.lsp.buf.references()
           end
         end, vim.tbl_extend("force", keymap_opts, { desc = "LSP: References" }))
-        vim.keymap.set("n", "<leader>F", function()
-          vim.lsp.buf.format({ async = true })
-        end, vim.tbl_extend("force", keymap_opts, { desc = "LSP: Format" }))
+        -- 格式化已统一至 conform.nvim 管理，移除重复快捷键
+        -- vim.keymap.set("n", "<leader>F", function()
+        --   vim.lsp.buf.format({ async = true })
+        -- end, vim.tbl_extend("force", keymap_opts, { desc = "LSP: Format" }))
         
         -- 诊断快捷键
         vim.keymap.set("n", "<leader>ld", function()
@@ -575,6 +634,25 @@ return {
       if pcall(require, "blink.cmp") then
         capabilities = vim.tbl_deep_extend("force", capabilities, require("blink.cmp").get_lsp_capabilities())
       end
+      
+      -- 增强 capabilities 以支持更多LSP功能
+      capabilities.textDocument.completion = {
+        dynamicRegistration = false,
+        completionItem = {
+          snippetSupport = true,
+          commitCharactersSupport = true,
+          documentationFormat = { "markdown", "plaintext" },
+          deprecatedSupport = true,
+          preselectSupport = true,
+          tagSupport = { valueSet = { 1 } },
+          insertReplaceSupport = true,
+          resolveSupport = {
+            properties = { "documentation", "detail", "additionalTextEdits" },
+          },
+          insertTextModeSupport = { valueSet = { 1, 2 } },
+          labelDetailsSupport = true,
+        },
+      }
       
       -- 添加折叠支持
       capabilities.textDocument.foldingRange = {

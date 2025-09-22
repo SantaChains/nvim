@@ -208,14 +208,14 @@ vim.keymap.set('n', '<leader>cb', compile_cpp,
 vim.keymap.set('n', '<leader>cr', run_executable,
   vim.tbl_extend('force', opts, { desc = 'C++: Run Executable' }))
 
--- 调试相关快捷键
-vim.keymap.set('n', '<leader>cd', function()
-  require('dap').continue()
-end, vim.tbl_extend('force', opts, { desc = 'C++: Debug' }))
+-- 调试相关快捷键 (已禁用)
+-- vim.keymap.set('n', '<leader>cd', function()
+  -- require('dap').continue()
+-- end, vim.tbl_extend('force', opts, { desc = 'C++: Debug' }))
 
-vim.keymap.set('n', '<leader>cb', function()
-  require('dap').toggle_breakpoint()
-end, vim.tbl_extend('force', opts, { desc = 'C++: Toggle Breakpoint' }))
+-- vim.keymap.set('n', '<leader>cb', function()
+  -- require('dap').toggle_breakpoint()
+-- end, vim.tbl_extend('force', opts, { desc = 'C++: Toggle Breakpoint' }))
 
 -- ==========================================
 -- 自动命令配置

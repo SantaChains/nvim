@@ -18,21 +18,21 @@ return {
       { "[b", "<cmd>BufferLineCyclePrev<cr>", desc = "上一个标签" },
       { "]b", "<cmd>BufferLineCycleNext<cr>", desc = "下一个标签" },
       -- 新增快捷键：按数字跳转
-      -- { "<leader>1", "<cmd>BufferLineGoToBuffer 1<cr>", desc = "跳转到标签 1" },
-      -- { "<leader>2", "<cmd>BufferLineGoToBuffer 2<cr>", desc = "跳转到标签 2" },
-      -- { "<leader>3", "<cmd>BufferLineGoToBuffer 3<cr>", desc = "跳转到标签 3" },
-      -- { "<leader>4", "<cmd>BufferLineGoToBuffer 4<cr>", desc = "跳转到标签 4" },
-      -- { "<leader>5", "<cmd>BufferLineGoToBuffer 5<cr>", desc = "跳转到标签 5" },
-      -- { "<leader>6", "<cmd>BufferLineGoToBuffer 6<cr>", desc = "跳转到标签 6" },
-      -- { "<leader>7", "<cmd>BufferLineGoToBuffer 7<cr>", desc = "跳转到标签 7" },
-      -- { "<leader>8", "<cmd>BufferLineGoToBuffer 8<cr>", desc = "跳转到标签 8" },
-      -- { "<leader>9", "<cmd>BufferLineGoToBuffer 9<cr>", desc = "跳转到标签 9" },
-      -- -- 新增快捷键：移动标签位置
-      -- { "<leader><", "<cmd>BufferLineMovePrev<cr>", desc = "左移标签" },
-      -- { "<leader>>", "<cmd>BufferLineMoveNext<cr>", desc = "右移标签" },
-      -- -- 新增快捷键：拾取标签
-      -- { "<leader>,b", "<cmd>BufferLinePick<cr>", desc = "拾取标签" },
-      -- { "<leader>,B", "<cmd>BufferLinePickClose<cr>", desc = "拾取关闭标签" },
+      { "<leader>1", "<cmd>BufferLineGoToBuffer 1<cr>", desc = "跳转到标签 1" },
+      { "<leader>2", "<cmd>BufferLineGoToBuffer 2<cr>", desc = "跳转到标签 2" },
+      { "<leader>3", "<cmd>BufferLineGoToBuffer 3<cr>", desc = "跳转到标签 3" },
+      { "<leader>4", "<cmd>BufferLineGoToBuffer 4<cr>", desc = "跳转到标签 4" },
+      { "<leader>5", "<cmd>BufferLineGoToBuffer 5<cr>", desc = "跳转到标签 5" },
+      { "<leader>6", "<cmd>BufferLineGoToBuffer 6<cr>", desc = "跳转到标签 6" },
+      { "<leader>7", "<cmd>BufferLineGoToBuffer 7<cr>", desc = "跳转到标签 7" },
+      { "<leader>8", "<cmd>BufferLineGoToBuffer 8<cr>", desc = "跳转到标签 8" },
+      { "<leader>9", "<cmd>BufferLineGoToBuffer 9<cr>", desc = "跳转到标签 9" },
+      -- 新增快捷键：移动标签位置
+      { "<leader><", "<cmd>BufferLineMovePrev<cr>", desc = "左移标签" },
+      { "<leader>>", "<cmd>BufferLineMoveNext<cr>", desc = "右移标签" },
+      -- 新增快捷键：拾取标签
+      { "<leader>,b", "<cmd>BufferLinePick<cr>", desc = "拾取标签" },
+      { "<leader>,B", "<cmd>BufferLinePickClose<cr>", desc = "拾取关闭标签" },
     },
     opts = {
       options = {

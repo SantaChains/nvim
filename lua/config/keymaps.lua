@@ -127,8 +127,8 @@ keymap.set("n", "gr", vim.lsp.buf.references, { desc = "查找引用" })
 keymap.set("n", "<space>D", "<cmd>Lspsaga peek_type_definition<CR>", { desc = "查看类型定义" })
 keymap.set("n", "<space>,n", vim.lsp.buf.rename, { desc = "重命名符号" })
 
--- 格式化和代码操作（使用 <leader>F 统一格式化）
-keymap.set("n", "<leader>F", function() vim.lsp.buf.format({ async = true }) end, { desc = "格式化代码" })
+-- 格式化和代码操作（格式化已统一至 conform.lua 管理）
+-- keymap.set("n", "<leader>F", function() vim.lsp.buf.format({ async = true }) end, { desc = "格式化代码" }) -- 已移至 conform.lua 统一管理
 keymap.set("n", "<leader>ca", "<cmd>Lspsaga code_action<CR>", { desc = "代码操作" })
 
 -- 缓冲区切换（与 Alt 键位配合使用）
@@ -157,6 +157,7 @@ keymap.set("n", "Q", "<nop>", { desc = "⛔ 禁用Ex模式" })
 -- 可选：禁用宏录制（q 键容易误触）
 keymap.set("n", "q", "<nop>", { desc = "🚫 禁用宏录制" })
 
+keymap.set("n", "<leader>n", "<nop>")
 -- ========== 自定义功能映射 ==========
 -- leader+space+space 触发文件浏览功能（原leader+space功能）
 -- 支持 Telescope 和原生文件浏览器

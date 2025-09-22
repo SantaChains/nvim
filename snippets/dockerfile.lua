@@ -42,7 +42,7 @@ CMD ["{}"]
         i(3, "package*.json"),
         i(4, "npm install"),
         i(5, "3000"),
-        c(6, {"npm", "start", "node", "python", "java"})
+        c(6, {t("npm"), t("start"), t("node"), t("python"), t("java")})
       }
     )
   ),
@@ -50,13 +50,13 @@ CMD ["{}"]
   -- FROM指令
   s(
     "from",
-    fmt("FROM {}", {c(1, {"ubuntu:latest", "node:18-alpine", "python:3.11", "alpine:latest", "nginx:alpine"})})
+    fmt("FROM {}", {c(1, {t("ubuntu:latest"), t("node:18-alpine"), t("python:3.11"), t("alpine:latest"), t("nginx:alpine")})})
   ),
   
   -- RUN指令
   s(
     "run",
-    fmt("RUN {}", {c(1, {"apt-get update", "yum update", "apk update", "npm install", "pip install"})})
+    fmt("RUN {}", {c(1, {t("apt-get update"), t("yum update"), t("apk update"), t("npm install"), t("pip install")})})
   ),
   
   -- COPY指令
@@ -74,13 +74,13 @@ CMD ["{}"]
   -- ENV指令
   s(
     "env",
-    fmt("ENV {}={}", {c(1, {"NODE_ENV", "PYTHONPATH", "JAVA_HOME", "PATH"}), c(2, {"production", "development", "test"})})
+    fmt("ENV {}={}", {c(1, {t("NODE_ENV"), t("PYTHONPATH"), t("JAVA_HOME"), t("PATH")}), c(2, {t("production"), t("development"), t("test")})})
   ),
   
   -- EXPOSE指令
   s(
     "expose",
-    fmt("EXPOSE {}", {c(1, {"80", "3000", "8080", "443", "22"})})
+    fmt("EXPOSE {}", {c(1, {t("80"), t("3000"), t("8080"), t("443"), t("22")})})
   ),
   
   -- ╭─────────────────────────────────────────────────────────╮
@@ -102,7 +102,7 @@ CMD ["{}"]
   -- USER指令
   s(
     "user",
-    fmt("USER {}", {c(1, {"root", "nobody", "app", "www-data"})})
+    fmt("USER {}", {c(1, {t("root"), t("nobody"), t("app"), t("www-data")})})
   ),
   
   -- LABEL指令
@@ -126,7 +126,7 @@ CMD ["{}"]
   -- STOPSIGNAL指令
   s(
     "stopsignal",
-    fmt("STOPSIGNAL {}", {c(1, {"SIGTERM", "SIGINT", "SIGKILL"})})
+    fmt("STOPSIGNAL {}", {c(1, {t("SIGTERM"), t("SIGINT"), t("SIGKILL")})})
   ),
   
   -- HEALTHCHECK指令
@@ -144,6 +144,6 @@ HEALTHCHECK --interval={} --timeout={} --start-period={} --retries={} \
   -- SHELL指令
   s(
     "shell",
-    fmt("SHELL [\"{}\"]", {c(1, {"/bin/bash", "/bin/sh", "/bin/zsh"})})
+    fmt("SHELL [\"{}\"]", {c(1, {t("/bin/bash"), t("/bin/sh"), t("/bin/zsh")})})
   ),
 })

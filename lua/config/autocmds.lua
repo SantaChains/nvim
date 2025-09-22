@@ -244,3 +244,55 @@ api.nvim_create_autocmd("BufEnter", {
         end
     end
 })
+
+-- -- 不可替换窗口保护设置
+-- vim.api.nvim_create_augroup('IrreplaceableWindows',{clear = true})
+-- vim.api.nvim_create_autocmd({'BufWinEnter','FileType'},{
+--     group = 'IrreplaceableWindows',
+--     pattern = '*',
+--     desc = '保护特殊窗口不被意外关闭或替换',
+--     callback = function()
+--         -- 定义需要保护的文件类型和缓冲区类型
+--         local protected_filetypes = {"OverseerList", "neo-tree", "NvimTree", "aerial", "undotree", "oil"}
+--         local protected_buftypes = {"nofile", "terminal", "quickfix", "loclist"}
+        
+--         -- 检查当前缓冲区是否需要保护
+--         local current_filetype = vim.bo.filetype
+--         local current_buftype = vim.bo.buftype
+        
+--         local should_protect = false
+--         if vim.tbl_contains(protected_filetypes, current_filetype) then
+--             should_protect = true
+--         elseif vim.tbl_contains(protected_buftypes, current_buftype) then
+--             should_protect = true
+--         end
+        
+--         -- 如果当前窗口需要保护，设置相关属性
+--         if should_protect then
+--             -- 设置窗口为固定大小，防止被调整
+--             vim.wo.winfixwidth = true
+--             vim.wo.winfixheight = true
+            
+--             -- 设置缓冲区为不可修改（如果适用）
+--             if current_buftype == "nofile" then
+--                 vim.bo.modifiable = false
+--             end
+            
+--             -- 禁用光标行高亮，减少视觉干扰
+--             vim.wo.cursorline = false
+            
+--             -- 可选：设置特殊缓冲区选项
+--             vim.opt_local.swapfile = false
+--             vim.opt_local.backup = false
+--             vim.opt_local.writebackup = false
+            
+--             -- 对于Oil文件管理器，添加额外保护
+--             if current_filetype == "oil" then
+--                 vim.wo.number = false
+--                 vim.wo.relativenumber = false
+--                 vim.wo.signcolumn = "no"
+--                 vim.bo.bufhidden = "hide"
+--             end
+--         end
+--     end
+-- })

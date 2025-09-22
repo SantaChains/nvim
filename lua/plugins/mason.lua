@@ -4,8 +4,8 @@ return {
     version = "v2.0.1", -- 锁定最新稳定版本
     dependencies = {
         "mason-org/mason-lspconfig.nvim",     -- LSP 安装集成
-        "mfussenegger/nvim-dap",              -- DAP 调试器核心
-        "jay-babu/mason-nvim-dap.nvim",       -- DAP 调试器集成
+        -- "mfussenegger/nvim-dap",              -- DAP 调试器核心 (已禁用)
+        -- "jay-babu/mason-nvim-dap.nvim",       -- DAP 调试器集成 (已禁用)
         -- LazyVim 现在默认使用 conform.nvim 和 nvim-lint
         -- 如需使用 none-ls，请启用 lazyvim.plugins.extras.lsp.none-ls extra
     },
@@ -16,6 +16,7 @@ return {
     },
     opts = {
         -- 完整的工具安装列表，包含所有 example 中的配置
+        -- 注意：已移除 Ruby、PHP、Julia 相关工具，因为这些语言环境不可用
         ensure_installed = {
             -- 格式化工具
             "stylua",           -- Lua 格式化
@@ -47,12 +48,12 @@ return {
             "marksman",                     -- Markdown
             "sqlls",                        -- SQL
             
-            -- DAP 调试器 (统一管理，配合 mason-nvim-dap)
-            "debugpy",          -- Python 调试
-            "codelldb",         -- C/C++/Rust 调试
-            "cpptools",         -- C/C++ 调试 (Microsoft C/C++ Extension)
+            -- DAP 调试器 (统一管理，配合 mason-nvim-dap) (已禁用)
+            -- "debugpy",          -- Python 调试
+            -- "codelldb",         -- C/C++/Rust 调试
+            -- "cpptools",         -- C/C++ 调试 (Microsoft C/C++ Extension)
             -- "delve",            -- Go 调试器 (已禁用，暂不支持 Go 开发)
-            "js-debug-adapter", -- JavaScript/TypeScript 调试
+            -- "js-debug-adapter", -- JavaScript/TypeScript 调试
             
             -- Linter 和诊断工具
             "eslint-lsp",                   -- JavaScript/TypeScript 代码检查
@@ -104,7 +105,45 @@ return {
         log_level = vim.log.levels.INFO,
     },
     config = function(_, opts)
+        -- 配置 Mason 跳过不可用语言的检查
+        opts.skip_language_servers = opts.skip_language_servers or {}
+        table.insert(opts.skip_language_servers, "ruby")
+        table.insert(opts.skip_language_servers, "php")
+        table.insert(opts.skip_language_servers, "julia")
+        
+        -- 定义不可用语言的包列表，避免安装和检查
+        local unavailable_language_packages = {
+            -- Ruby 相关包
+            "solargraph", "ruby-lsp", "rubocop", "rufo", "rubyfmt",
+            -- PHP 相关包  
+            "phpactor", "intelephense", "php-cs-fixer", "phpcbf", "phpcs",
+            "phpmd", "phpstan", "psalm", "php-debug-adapter",
+            -- Julia 相关包
+            "julia-lsp", "julials",
+        }
+        
+        local function is_package_available(package_name)
+            -- 检查是否在不可用语言包列表中
+            for _, unavailable in ipairs(unavailable_language_packages) do
+                if package_name == unavailable then
+                    return false
+                end
+            end
+            return true
+        end
+        
         require("mason").setup(opts)
+        
+        -- 配置 Mason 注册表跳过不可用语言的包
+        local registry = require("mason-registry")
+        local original_get_package = registry.get_package
+        registry.get_package = function(name)
+            -- 跳过不可用语言的包
+            if not is_package_available(name) then
+                return nil
+            end
+            return original_get_package(name)
+        end
         
         -- 配置 mason-lspconfig (移除重复的 LSP 配置，由 lsp-config.lua 统一管理)
         require("mason-lspconfig").setup({
@@ -124,29 +163,37 @@ return {
                 "marksman",         -- Markdown
                 "sqlls",            -- SQL
                 "eslint",           -- JavaScript/TypeScript 代码检查
+                -- 注意：已移除 Ruby、PHP、Julia 相关 LSP 服务器，因为这些语言环境不可用
             },
             -- 禁用自动安装和处理器，由 lsp-config.lua 统一管理
             automatic_installation = false,
             automatic_enable = false,  -- 禁用自动启用，由 lsp-config.lua 手动控制
         })
         
-        -- 配置 mason-nvim-dap (依赖 Mason 的统一安装，不重复安装)
-        require("mason-nvim-dap").setup({
+        -- 配置 mason-nvim-dap (依赖 Mason 的统一安装，不重复安装) (已禁用)
+        -- require("mason-nvim-dap").setup({
             -- 不再使用 ensure_installed，避免与 Mason 冲突
             -- ensure_installed = {},  -- 由 Mason 的 opts.ensure_installed 统一管理
-            automatic_installation = false,  -- 禁用自动安装，避免冲突
-            handlers = {
+            -- automatic_installation = false,  -- 禁用自动安装，避免冲突
+            -- handlers = {
                 -- 默认处理器：自动配置所有已安装的调试器
-                function(config)
-                    require('mason-nvim-dap').default_setup(config)
-                end,
-            },
-        })
+                -- function(config)
+                    -- require('mason-nvim-dap').default_setup(config)
+                -- end,
+            -- },
+        -- })
         
         -- 优化的自动安装配置（避免重复安装冲突）
         local mr = require("mason-registry")
+        
         local function safe_ensure_installed()
             for _, tool in ipairs(opts.ensure_installed) do
+                -- 跳过不可用语言的包
+                if not is_package_available(tool) then
+                    print("跳过不可用语言的包: " .. tool)
+                    goto continue
+                end
+                
                 local p = mr.get_package(tool)
                 -- 只在包未安装且未在安装中时才安装
                 if not p:is_installed() and not p:is_installing() then
@@ -154,6 +201,7 @@ return {
                         p:install()
                     end)
                 end
+                ::continue::
             end
         end
         

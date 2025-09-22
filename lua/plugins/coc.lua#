@@ -1,1 +1,57 @@
-return{ 'neoclide/coc.nvim', branch = 'release', }
+return {
+  "neoclide/coc.nvim",
+  branch = "release",
+  event = "VeryLazy",
+  config = function()
+    -- Coc 的键位映射
+    vim.keymap.set("n", "gd", "<Plug>(coc-definition)", { silent = true, desc = "Go to definition" })
+    vim.keymap.set("n", "gy", "<Plug>(coc-type-definition)", { silent = true, desc = "Go to type definition" })
+    vim.keymap.set("n", "gi", "<Plug>(coc-implementation)", { silent = true, desc = "Go to implementation" })
+    vim.keymap.set("n", "gr", "<Plug>(coc-references)", { silent = true, desc = "Show references" })
+    vim.keymap.set("n", "K", "<Plug>(coc-hover)", { silent = true, desc = "Show documentation" })
+    
+    -- 重命名和代码操作
+    vim.keymap.set("n", "<leader>rn", "<Plug>(coc-rename)", { silent = true, desc = "Rename symbol" })
+    vim.keymap.set("n", "<leader>ca", "<Plug>(coc-codeaction-cursor)", { silent = true, desc = "Code action" })
+    vim.keymap.set("x", "<leader>ca", "<Plug>(coc-codeaction-selected)", { silent = true, desc = "Code action for selection" })
+    
+    -- 格式化
+    vim.keymap.set("n", "<leader>f", "<Plug>(coc-format)", { silent = true, desc = "Format file" })
+    vim.keymap.set("x", "<leader>f", "<Plug>(coc-format-selected)", { silent = true, desc = "Format selection" })
+    
+    -- 自动补全
+    vim.keymap.set("i", "<C-space>", "coc#refresh()", { silent = true, expr = true, desc = "Trigger completion" })
+    vim.keymap.set("i", "<CR>", [[coc#pum#visible() ? coc#pum#confirm() : "\<C-g>u\<CR>\<c-r>=coc#on_enter()\<CR>"]], { silent = true, expr = true, desc = "Confirm completion" })
+    vim.keymap.set("i", "<Tab>", [[coc#pum#visible() ? coc#pum#next(1) : "\<Tab>"]], { silent = true, expr = true, desc = "Next completion" })
+    vim.keymap.set("i", "<S-Tab>", [[coc#pum#visible() ? coc#pum#prev(1) : "\<S-Tab>"]], { silent = true, expr = true, desc = "Previous completion" })
+    
+    -- 诊断
+    vim.keymap.set("n", "<leader>d", "<Plug>(coc-diagnostic-next)", { silent = true, desc = "Next diagnostic" })
+    vim.keymap.set("n", "<leader>D", "<Plug>(coc-diagnostic-prev)", { silent = true, desc = "Previous diagnostic" })
+    
+    -- 浮动窗口
+    vim.keymap.set("n", "<leader>q", "<Plug>(coc-fix-current)", { silent = true, desc = "Quick fix" })
+    
+    -- Coc 命令
+    vim.api.nvim_create_user_command("CocList", function(opts)
+      vim.fn.CocActionAsync("runCommand", "explorer")
+    end, { desc = "Open Coc explorer" })
+  end,
+  init = function()
+    -- 一些 Coc 的初始化设置
+    vim.g.coc_global_extensions = {
+      "coc-json",
+      "coc-tsserver",
+      "coc-html",
+      "coc-css",
+      "coc-python",
+      "coc-java",
+      "coc-go",
+      "coc-rust-analyzer",
+      "coc-vimlsp",
+      "coc-yaml",
+      "coc-sh",
+      "coc-snippets"
+    }
+  end
+}

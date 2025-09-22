@@ -12,6 +12,7 @@ vim.g.lazyvim_check_order = false
 
 require("config.keybindings")
 
+
 -- 加载 Krabby 配置
 -- require("config.krabby-config")
 
@@ -24,6 +25,9 @@ require("config.keybindings")
 -- require("config.autocmds")
 -- require("plugins.init")
 
+-- Coc 配置
+-- vim.g.coc_config_home = vim.fn.stdpath('config')
+-- vim.g.coc_data_home = vim.fn.stdpath('data') .. '/coc'
 
 -------------------------------------------------
 -- Neovide 专用 GUI 设置

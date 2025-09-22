@@ -424,7 +424,7 @@ let {} = thread::spawn(|| {{
     'arc_mutex',
     fmt(
       [[
-use std::sync::{Arc, Mutex};
+use std::sync::{{Arc, Mutex}};
 use std::thread;
 
 let {} = Arc::new(Mutex::new({}));

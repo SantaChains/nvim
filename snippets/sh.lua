@@ -40,7 +40,7 @@ ls.add_snippets('sh', {
   s('error', fmt('echo "Error: {}" >&2', { i(1, 'error message') })),
   
   s('echo_color', fmt('echo -e "\\033[{}m{}\\033[0m"', { 
-    c(1, { '31', '32', '33', '34', '35', '36' }), 
+    c(1, { t('31'), t('32'), t('33'), t('34'), t('35'), t('36') }), 
     i(2, 'message') 
   })),
   
@@ -56,7 +56,7 @@ ls.add_snippets('sh', {
   s('command_exists', fmt('if command -v {} >/dev/null 2>&1; then\n    echo "{} is installed"\nelse\n    echo "{} is not installed"\nfi\n', { i(1, 'command'), rep(1), rep(1) })),
   s('sys_info', t('echo "OS: $(uname -s)"\necho "Kernel: $(uname -r)"\necho "Architecture: $(uname -m)"\necho "Hostname: $(hostname)"\necho "Uptime: $(uptime -p)"\n')),
   s('memory_usage', t('free -h | awk \'/^Mem:/ {print $3 "/" $2}\'')),
-  s('disk_usage', fmt('df -h {} | tail -1 | awk \'{print $5}\'', { i(1, '/') })),
+  s('disk_usage', fmt('df -h {} | tail -1 | awk \'{{print $5}}\'', { i(1, '/') })),
   
   -- 网络操作
   s('check_network', fmt('if ping -c 1 {} >/dev/null 2>&1; then\n    echo "Network is reachable"\nelse\n    echo "Network is unreachable"\nfi\n', { i(1, 'google.com') })),
