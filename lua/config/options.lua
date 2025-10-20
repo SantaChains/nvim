@@ -13,13 +13,29 @@ vim.opt.guifont = "Monaco Nerd Font Mono:h14"
 -- vim.opt.completeopt = { 'menu', 'menuone', 'noselect' }
 
 if vim.g.neovide then
+  -- 外观和透明度
   vim.g.neovide_opacity = 0.9
   vim.g.neovide_background_color = "#1a1b26"
+  
+  -- 模糊效果
   vim.g.neovide_floating_blur_amount_x = 2.0
   vim.g.neovide_floating_blur_amount_y = 2.0
+  
+  -- 光标动画
   vim.g.neovide_cursor_animation_length = 0.1
   vim.g.neovide_cursor_trail_size = 0.8
   vim.g.neovide_cursor_antialiasing = true
+  
+  -- 窗口行为
+  vim.g.neovide_remember_window_size = true
+  vim.g.neovide_hide_mouse_when_typing = true
+  
+  -- 禁用系统提示音
+  vim.opt.belloff = "all"
+  
+  -- 无边框窗口配置（这些需要通过命令行参数或环境变量设置）
+  -- 在 Windows 上启动 Neovide 时使用：neovide --frame none
+  -- 或者设置环境变量：NEOVIDE_FRAME=none
 end
 
 

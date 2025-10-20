@@ -75,15 +75,15 @@ return {
         { section = "header", gap = 0 },
         { icon = "󰌌 ", title = "Keymaps", section = "keys", indent = 2, padding = 1 },
         { section = "startup" },
-        {
-        pane = 2,
-        icon = "󰢵 ",                  
-        title = "Pokemon",           
-        section = "terminal",
-        cmd = "krabby random  --no-title",  --sleep 100ms
-        height = 10,        
-        padding = 1,                    
-         },
+        -- {
+        -- pane = 2,
+        -- icon = "󰢵 ",                  
+        -- title = "Pokemon",           
+        -- section = "terminal",
+        -- cmd = "krabby random  --no-title",  --sleep 100ms
+        -- height = 10,        
+        -- padding = 1,                    
+        --  },
         
         { pane = 2, icon = "󰋚 ", key = "r", title = "Recent Files", section = "recent_files", indent = 2, padding = 1, action = function() require("snacks").picker.recent() end },
         --  { pane =2,icon = "󰋚 ", key = "r",title = "Recent Files", section = "recent_files", indent = 2, padding = 1,action = function()

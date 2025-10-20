@@ -58,3 +58,28 @@ require("config.keybindings")
 vim.g.neovide_remember_window_size = true  -- 记住上次退出时的窗口大小
 -- vim.g.neovide_confirm_quit = true          -- 退出时确认
 -- vim.g.neovide_hide_mouse_when_typing = true -- 打字时自动隐藏鼠标
+
+-------------------------------------------------
+-- Neovide 无边框窗口配置说明
+-------------------------------------------------
+-- 要实现无边框窗口，需要使用以下方式之一：
+-- 
+-- 方法1：命令行参数启动
+-- neovide --frame none
+-- 
+-- 方法2：设置环境变量
+-- set NEOVIDE_FRAME=none
+-- 
+-- 方法3：创建批处理文件（推荐）
+-- 创建 start_neovide.bat 文件，内容：
+-- @echo off
+-- set NEOVIDE_FRAME=none
+-- start neovide
+-- 
+-- 无边框窗口功能：
+-- ✓ 隐藏系统原生边框
+-- ✓ 支持拖动（按住Alt键或配置拖动区域）
+-- ✓ 支持调整大小（移动到窗口边缘）
+-- ✓ 支持最小化、最大化、关闭（需要额外配置）
+-- 
+-- 注意：无边框后窗口控制需要通过键盘快捷键或自定义标题栏
