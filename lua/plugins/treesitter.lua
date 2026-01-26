@@ -41,6 +41,7 @@ return {
       "cpp",
       "rust",
       "go",
+      "latex",  -- 添加 LaTeX 支持
     },
     
     -- 自动安装缺失的解析器
@@ -57,10 +58,7 @@ return {
         if ok and stats and stats.size > max_filesize then
           return true
         end
-        -- LaTeX文件禁用（避免权限问题）
-        if lang == "latex" then
-          return true
-        end
+          -- 其他语言的特定处理可以在这里添加
       end,
       -- 使用 Vim 的正则表达式引擎作为后备
       additional_vim_regex_highlighting = false,
@@ -135,42 +133,15 @@ return {
   },
   
   config = function(_, opts)
+    local safe_require = require('utils.safe_require')
     -- 加载 treesitter 配置 - 官方推荐简洁方式
-    require("nvim-treesitter").setup(opts)
+    local treesitter = safe_require.safe_require('nvim-treesitter')
+    if treesitter then
+      treesitter.setup(opts)
+    end
     
-    -- 手动注册TSInstallInfo命令（新版TreeSitter缺失此命令）
-    vim.api.nvim_create_user_command('TSInstallInfo', function()
-      local configs = require('nvim-treesitter.config')
-      local parsers = configs.get_installed()
-      
-      print("已安装的TreeSitter解析器:")
-      for _, lang in ipairs(parsers) do
-        print(string.format("  %s", lang))
-      end
-      
-      local available = configs.get_available()
-      local not_installed = {}
-      for _, lang in ipairs(available) do
-        if not vim.tbl_contains(parsers, lang) then
-          table.insert(not_installed, lang)
-        end
-      end
-      
-      if #not_installed > 0 then
-        print("\n可安装的解析器:")
-        for _, lang in ipairs(not_installed) do
-          print(string.format("  %s", lang))
-        end
-      end
-    end, {
-      desc = 'Show treesitter parser install info',
-    })
+    -- 移除自定义的TSInstallInfo命令，使用内置的
     
-    -- 添加LaTeX问题修复命令
-    vim.api.nvim_create_user_command('TSFixLatex', function()
-      require('plugins.treesitter-fix').fix_latex_parser()
-    end, {
-      desc = 'Fix LaTeX treesitter parser permission issues',
-    })
+
   end,
 }

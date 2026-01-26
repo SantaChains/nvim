@@ -3,7 +3,11 @@ return {
   dependencies = "nvim-treesitter/nvim-treesitter",
   -- Optional: for snippet support (if you have LuaSnip)
   config = function()
-    require("neogen").setup({
+    local safe_require = require('utils.safe_require')
+    local neogen = safe_require.safe_require('neogen')
+    if not neogen then return end
+    
+    neogen.setup({
       -- 启用插件
       enabled = true,
       -- 注释后自动进入插入模式
@@ -64,14 +68,34 @@ return {
   -- 按键映射
   keys = {
     -- 生成当前函数的注释
-    { "<leader>nf", ":lua require('neogen').generate({ type = 'func' })<CR>", desc = "生成函数注释" },
+    { "<leader>nf", function()
+      local safe_require = require('utils.safe_require')
+      local neogen = safe_require.safe_require('neogen')
+      if neogen then neogen.generate({ type = 'func' }) end
+    end, desc = "生成函数注释" },
     -- 生成当前类的注释
-    { "<leader>nc", ":lua require('neogen').generate({ type = 'class' })<CR>", desc = "生成类注释" },
+    { "<leader>nc", function()
+      local safe_require = require('utils.safe_require')
+      local neogen = safe_require.safe_require('neogen')
+      if neogen then neogen.generate({ type = 'class' }) end
+    end, desc = "生成类注释" },
     -- 生成当前类型的注释
-    { "<leader>nt", ":lua require('neogen').generate({ type = 'type' })<CR>", desc = "生成类型注释" },
+    { "<leader>nt", function()
+      local safe_require = require('utils.safe_require')
+      local neogen = safe_require.safe_require('neogen')
+      if neogen then neogen.generate({ type = 'type' }) end
+    end, desc = "生成类型注释" },
     -- 生成文件注释
-    { "<leader>nd", ":lua require('neogen').generate({ type = 'file' })<CR>", desc = "生成文件注释" },
+    { "<leader>nd", function()
+      local safe_require = require('utils.safe_require')
+      local neogen = safe_require.safe_require('neogen')
+      if neogen then neogen.generate({ type = 'file' }) end
+    end, desc = "生成文件注释" },
     -- 智能生成（根据上下文自动选择类型）
-    { "<leader>na", ":lua require('neogen').generate()<CR>", desc = "智能生成注释" },
+    { "<leader>na", function()
+      local safe_require = require('utils.safe_require')
+      local neogen = safe_require.safe_require('neogen')
+      if neogen then neogen.generate() end
+    end, desc = "智能生成注释" },
   },
 }

@@ -56,14 +56,24 @@ return {
         keys = {
           -- 紧凑布局：图标 + 快捷键 + 描述
           { icon = "󰈞 ", key = "f", desc = "Find File", action = ":Telescope find_files" },
-          { icon = "󰈔 ", key = "n", desc = "Neon File", action = ":ene | startinsert" },
+          { icon = "󰈔 ", key = "e", desc = "Neon File", action = ":ene | startinsert" },
           --  { icon = "󰊄 ", key = "g", desc = "Find Text", action = ":lua Snacks.dashboard.pick('live_grep')" },
           { icon = "󰊄 ", key = "g", desc = "Find Text", action = function() require("snacks").dashboard.pick("live_grep") end },
           { icon = "󱛒", key = "o", desc = "Restore Session", section = "session" },
           { icon = "󰏖 ", key = "l", desc = "Sanins Manager", action = ":Lazy" },
           { icon = "󰒕 ", key = "h", desc = "Health Check", action = ":checkhealth" },
-          { icon = "", key = "t", desc = "TreeSitter Info", action = function() vim.cmd.TSInstallInfo() end  },
-          { icon = " ", key = "n", desc = "Conform Info", action = function() vim.cmd.ConformInfo() end  },
+          { icon = "", key = "t", desc = "TreeSitter Info", action = function() 
+            local ok, err = pcall(function() vim.cmd.TSInstallInfo() end)
+            if not ok then
+              vim.notify("TreeSitter 信息获取失败: " .. tostring(err), vim.log.levels.ERROR)
+            end
+          end },
+          { icon = " ", key = "n", desc = "Conform Info", action = function() 
+            local ok, err = pcall(function() vim.cmd.ConformInfo() end)
+            if not ok then
+              vim.notify("ConformInfo 命令执行失败: " .. tostring(err), vim.log.levels.ERROR)
+            end
+          end  },
           { icon = "󱌢 ", key = "m", desc = "Mason", action = ":Mason" },
           { icon = "󰒓 ", key = "c", desc = "Config", action = ":lua Snacks.dashboard.pick('files', {cwd = vim.fn.stdpath('config')})" },
           { icon = "󰃃 ", key = "x", desc = "Extras", action = ":LazyExtras" },

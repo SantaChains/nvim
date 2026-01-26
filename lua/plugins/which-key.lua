@@ -47,8 +47,11 @@ return {
   },
   -- 防止重复定义 which-key 组的配置
   config = function(_, opts)
-    local wk = require("which-key")
-    wk.setup(opts)
+    local safe_require = require('utils.safe_require')
+    local wk = safe_require.safe_require('which-key')
+    if wk then
+      wk.setup(opts)
+    end
     
     -- 这里不再定义任何组，全部由 keybindings.lua 统一管理，避免重复
   end,
@@ -56,7 +59,11 @@ return {
     {
       "<leader>?",
       function()
-        require("which-key").show({ global = false })
+        local safe_require = require('utils.safe_require')
+        local wk = safe_require.safe_require('which-key')
+        if wk then
+          wk.show({ global = false })
+        end
       end,
       desc = "Buffer Local Keymaps (which-key)",
     },

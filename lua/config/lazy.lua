@@ -55,6 +55,7 @@ require("lazy").setup({
         "tutor",
         "zipPlugin",
         "mini.ai",
+        "catppuccin"
       },
     },
   },

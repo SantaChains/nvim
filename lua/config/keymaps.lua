@@ -102,10 +102,18 @@ keymap.set("n", "<leader>gh", "G$", { desc = "跳转末行末" })
 -- 终端配置：使用正确的Neovim终端命令
 -- 根据Neovim官方文档，:terminal命令应该在split之后执行
 keymap.set("n", "<leader>t", function()
-    -- 先分割窗口，然后在新窗口中打开终端
+    -- 获取当前文件所在目录
+    local current_dir = vim.fn.expand('%:p:h')
+    -- 如果当前文件没有目录（新文件），使用当前工作目录
+    if current_dir == '' then
+        current_dir = vim.fn.getcwd()
+    end
+    
+    -- 先分割窗口，然后在新窗口中打开终端，并切换到当前文件目录
     vim.cmd("split")
-    vim.cmd("terminal pwsh.exe -NoLogo")
     vim.cmd("resize 15")
+    -- 使用 cd 命令切换到目标目录，然后启动终端
+    vim.cmd(string.format("terminal pwsh.exe -NoLogo -Command \"cd '%s'; pwsh.exe -NoLogo\"", current_dir))
 end, { desc = "💻 横向终端" })
 
 -- 退出终端模式

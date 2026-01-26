@@ -19,6 +19,9 @@ require("config.keybindings")
 -- 修复键位冲突
 -- require("core.keymap_fix").setup()
 
+-- 加载 ShaDa 修复配置
+-- require("config.shada-fix")
+
 -- 加载核心配置这部分lazyvim自动处理了
 -- require("config.options")
 -- require("config.keymaps")

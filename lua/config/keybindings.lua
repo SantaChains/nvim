@@ -53,22 +53,22 @@ keymap.set("n", "<leader>xj", function() vim.diagnostic.goto_next({wrap = true})
 keymap.set("n", "<leader>xk", function() vim.diagnostic.goto_prev({wrap = true}) end, {desc = "🔍 上一个诊断"})
 keymap.set("n", "<leader>xe", vim.diagnostic.open_float, {desc = "🔍 诊断详情"})
 
--- ===== Python 调试组 (<leader>py) ===== (已禁用)
--- keymap.set("n", "<leader>pyb", function()
-  -- if has_plugin("dap") then
-    -- require("dap").toggle_breakpoint()
-  -- else
-    -- vim.notify("需要安装 nvim-dap", vim.log.levels.WARN)
-  -- end
--- end, {desc = "🐍 切换断点"})
+-- ===== Python 调试组 (<leader>py) =====
+keymap.set("n", "<leader>pyb", function()
+  if has_plugin("dap") then
+    require("dap").toggle_breakpoint()
+  else
+    vim.notify("需要安装 nvim-dap", vim.log.levels.WARN)
+  end
+end, {desc = "🐍 切换断点"})
 
--- keymap.set("n", "<leader>pyc", function()
-  -- if has_plugin("dap") then
-    -- require("dap").continue()
-  -- else
-    -- vim.notify("需要安装 nvim-dap", vim.log.levels.WARN)
-  -- end
--- end, {desc = "🐍 继续执行"})
+keymap.set("n", "<leader>pyc", function()
+  if has_plugin("dap") then
+    require("dap").continue()
+  else
+    vim.notify("需要安装 nvim-dap", vim.log.levels.WARN)
+  end
+end, {desc = "🐍 继续执行"})
 
 -- ===== 配置管理组 (<leader>C) =====
 local config_paths = {
@@ -255,12 +255,12 @@ vim.api.nvim_create_user_command('Q', function()
       "&保存并退出\n&直接退出\n&取消", 1)
     
     if choice == 1 then
-      cmd("wa | qa")
+      vim.cmd("silent! wa | qa")
     elseif choice == 2 then
-      cmd("qa!")
+      vim.cmd("silent! qa!")
     end
   else
-    cmd("qa")
+    vim.cmd("silent! qa")
   end
 end, {desc = "🚪 智能退出"})
 

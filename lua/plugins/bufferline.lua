@@ -14,6 +14,7 @@ return {
       { "<leader>,P", "<cmd>BufferLineGroupClose ungrouped<cr>", desc = "关闭未固定的标签" },
       { "<leader>,o", "<cmd>BufferLineCloseOthers<cr>", desc = "关闭其他标签" },
       { "<leader>,r", "<cmd>BufferLineCloseRight<cr>", desc = "关闭右侧标签" },
+      { "<leader>,x", "<cmd>bdelete!<cr>", desc = "关闭当前标签" },
       { "<leader>,l", "<cmd>BufferLineCloseLeft<cr>", desc = "关闭左侧标签" },
       { "[b", "<cmd>BufferLineCyclePrev<cr>", desc = "上一个标签" },
       { "]b", "<cmd>BufferLineCycleNext<cr>", desc = "下一个标签" },
@@ -21,12 +22,12 @@ return {
       { "<leader>1", "<cmd>BufferLineGoToBuffer 1<cr>", desc = "跳转到标签 1" },
       { "<leader>2", "<cmd>BufferLineGoToBuffer 2<cr>", desc = "跳转到标签 2" },
       { "<leader>3", "<cmd>BufferLineGoToBuffer 3<cr>", desc = "跳转到标签 3" },
-      { "<leader>4", "<cmd>BufferLineGoToBuffer 4<cr>", desc = "跳转到标签 4" },
-      { "<leader>5", "<cmd>BufferLineGoToBuffer 5<cr>", desc = "跳转到标签 5" },
-      { "<leader>6", "<cmd>BufferLineGoToBuffer 6<cr>", desc = "跳转到标签 6" },
-      { "<leader>7", "<cmd>BufferLineGoToBuffer 7<cr>", desc = "跳转到标签 7" },
-      { "<leader>8", "<cmd>BufferLineGoToBuffer 8<cr>", desc = "跳转到标签 8" },
-      { "<leader>9", "<cmd>BufferLineGoToBuffer 9<cr>", desc = "跳转到标签 9" },
+      -- { "<leader>4", "<cmd>BufferLineGoToBuffer 4<cr>", desc = "跳转到标签 4" },
+      -- { "<leader>5", "<cmd>BufferLineGoToBuffer 5<cr>", desc = "跳转到标签 5" },
+      -- { "<leader>6", "<cmd>BufferLineGoToBuffer 6<cr>", desc = "跳转到标签 6" },
+      -- { "<leader>7", "<cmd>BufferLineGoToBuffer 7<cr>", desc = "跳转到标签 7" },
+      -- { "<leader>8", "<cmd>BufferLineGoToBuffer 8<cr>", desc = "跳转到标签 8" },
+      -- { "<leader>9", "<cmd>BufferLineGoToBuffer 9<cr>", desc = "跳转到标签 9" },
       -- 新增快捷键：移动标签位置
       { "<leader><", "<cmd>BufferLineMovePrev<cr>", desc = "左移标签" },
       { "<leader>>", "<cmd>BufferLineMoveNext<cr>", desc = "右移标签" },
@@ -58,8 +59,11 @@ return {
         diagnostics = "nvim_lsp", -- 显示诊断信息
         diagnostics_update_in_insert = false, -- 插入模式不更新诊断
         diagnostics_indicator = function(count, level, diagnostics_dict, context)
-          local icon = level:match("error") and " " or " "
-          return " " .. icon .. count
+          local safe_require = require('utils.safe_require')
+          return safe_require.safe_call(function()
+            local icon = level:match("error") and " " or " "
+            return " " .. icon .. count
+          end, "诊断指示器计算失败") or "  " .. count
         end,
         color_icons = true, -- 彩色图标
         show_buffer_icons = true, -- 显示文件图标
@@ -117,14 +121,30 @@ return {
       
       -- Readline风格的Ctrl+左右箭头，符合终端编辑习惯
       -- Ctrl+Left: 向后移动一个单词(开头)
-      { '<C-Left>', '<cmd>lua require("spider").motion("b")<CR>', mode = { 'i', 'n', 'c' }, desc = '上一个单词(Ctrl+←)' },
+      { '<C-Left>', function()
+        local safe_require = require('utils.safe_require')
+        local spider = safe_require.safe_require('spider')
+        if spider then spider.motion("b") end
+      end, mode = { 'i', 'n', 'c' }, desc = '上一个单词(Ctrl+←)' },
       
       -- Ctrl+Right: 向前移动一个单词(开头)
-      { '<C-Right>', '<cmd>lua require("spider").motion("w")<CR>', mode = { 'i', 'n', 'c' }, desc = '下一个单词(Ctrl+→)' },
+      { '<C-Right>', function()
+        local safe_require = require('utils.safe_require')
+        local spider = safe_require.safe_require('spider')
+        if spider then spider.motion("w") end
+      end, mode = { 'i', 'n', 'c' }, desc = '下一个单词(Ctrl+→)' },
       
       -- Alt+Left/Right: 在插入模式下也支持单词跳转
-      { '<M-Left>', '<cmd>lua require("spider").motion("b")<CR>', mode = 'i', desc = '上一个单词(Alt+←)' },
-      { '<M-Right>', '<cmd>lua require("spider").motion("w")<CR>', mode = 'i', desc = '下一个单词(Alt+→)' },
+      { '<M-Left>', function()
+        local safe_require = require('utils.safe_require')
+        local spider = safe_require.safe_require('spider')
+        if spider then spider.motion("b") end
+      end, mode = 'i', desc = '上一个单词(Alt+←)' },
+      { '<M-Right>', function()
+        local safe_require = require('utils.safe_require')
+        local spider = safe_require.safe_require('spider')
+        if spider then spider.motion("w") end
+      end, mode = 'i', desc = '下一个单词(Alt+→)' },
     },
     opts = {
       -- 跳过不重要的标点符号，更符合编程习惯

@@ -17,7 +17,7 @@ vim.opt_local.softtabstop = 2  -- 退格键删除的宽度
 vim.opt_local.autoindent = true  -- 自动继承上一行缩进
 vim.opt_local.smartindent = true -- 智能缩进（识别代码结构）
 vim.opt_local.cindent = true     -- C语言风格缩进
-vim.opt_local.indentexpr = ''    -- 禁用表达式缩进，使用cindent
+vim.opt_local.indentexpr = 'GetCppIndent()'    -- 启用C++表达式缩进，与cindent配合使用
 
 -- 代码格式化设置
 vim.opt_local.textwidth = 100    -- 自动换行宽度（现代C++标准）

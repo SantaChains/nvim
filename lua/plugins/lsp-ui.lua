@@ -76,14 +76,16 @@ vim.api.nvim_create_autocmd('LspAttach', {
 
     -- 增强的定义跳转（带检查）
     map('gd', function()
+      local safe_require = require('utils.safe_require')
       local params = vim.lsp.util.make_position_params()
       vim.lsp.buf_request(event.buf, 'textDocument/definition', params, function(_, result, _, _)
         if not result or vim.tbl_isempty(result) then
           vim.notify('No definition found', vim.log.levels.INFO)
         else
           -- 优先使用 snacks.picker，回退到内置
-          if pcall(require, 'snacks') then
-            require('snacks').picker.lsp_definitions()
+          local snacks = safe_require.safe_require('snacks')
+          if snacks then
+            snacks.picker.lsp_definitions()
           else
             vim.lsp.buf.definition()
           end
@@ -93,8 +95,10 @@ vim.api.nvim_create_autocmd('LspAttach', {
 
     -- 增强的引用查找
     map('gr', function()
-      if pcall(require, 'snacks') then
-        require('snacks').picker.lsp_references()
+      local safe_require = require('utils.safe_require')
+      local snacks = safe_require.safe_require('snacks')
+      if snacks then
+        snacks.picker.lsp_references()
       else
         vim.lsp.buf.references()
       end
@@ -199,11 +203,15 @@ vim.api.nvim_create_user_command('LspRestart', function()
 end, { desc = 'Restart all LSP servers' })
 
 vim.api.nvim_create_user_command('LspLog', function()
-  vim.cmd('edit ' .. vim.lsp.get_log_path())
+  local safe_require = require('utils.safe_require')
+  safe_require.safe_call(function()
+    vim.cmd('edit ' .. vim.lsp.get_log_path())
+  end, "打开 LSP 日志文件失败")
 end, { desc = 'Open LSP log file' })
 
 vim.api.nvim_create_user_command('LspInfo', function()
-  vim.cmd('LspInfo')
+  local safe_require = require('utils.safe_require')
+  safe_require.safe_cmd('LspInfo', "显示 LSP 客户端信息失败")
 end, { desc = 'Show LSP client information' })
 
 -- LSP 状态显示（可选）

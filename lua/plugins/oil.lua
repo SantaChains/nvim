@@ -74,7 +74,11 @@ return {
     
     -- 额外的配置和键位映射
     config = function(_, opts)
-      require("oil").setup(opts)
+      local safe_require = require('utils.safe_require')
+      local oil = safe_require.safe_require('oil')
+      if not oil then return end
+      
+      oil.setup(opts)
       
       -- 为Oil缓冲区添加特殊保护
       vim.api.nvim_create_autocmd("FileType", {
@@ -115,15 +119,19 @@ return {
           
           -- 快速删除
           vim.keymap.set("n", "d", function()
-            local entry = require("oil").get_cursor_entry()
-            if entry then
-              vim.ui.input({
-                prompt = string.format("确认删除 '%s'? (y/N): ", entry.name),
-              }, function(input)
-                if input and input:lower() == "y" then
-                  vim.cmd("OilTrash")
-                end
-              end)
+            local safe_require = require('utils.safe_require')
+            local oil = safe_require.safe_require('oil')
+            if oil then
+              local entry = oil.get_cursor_entry()
+              if entry then
+                vim.ui.input({
+                  prompt = string.format("确认删除 '%s'? (y/N): ", entry.name),
+                }, function(input)
+                  if input and input:lower() == "y" then
+                    vim.cmd("OilTrash")
+                  end
+                end)
+              end
             end
           end, keymap_opts)
         end,

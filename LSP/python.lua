@@ -180,33 +180,55 @@ end
 
 -- 格式化Python代码
 local function format_python()
+  -- 优先使用LSP格式化
   if vim.lsp.buf.server_ready() then
-    vim.lsp.buf.format({
-      async = false,
-      filter = function(client)
-        return client.name == 'ruff' or client.name == 'blackd'
-      end
-    })
-  else
-    -- 尝试使用外部格式化工具
-    local python_cmd = detect_python_env()
-    local formatters = {
-      'black',
-      'autopep8',
-      'yapf'
-    }
+    local clients = vim.lsp.get_clients({ bufnr = 0 })
+    local has_ruff = false
     
-    for _, formatter in ipairs(formatters) do
-      local formatter_cmd = python_cmd:gsub('python$', formatter)
-      if vim.fn.executable(formatter_cmd) == 1 then
-        local current_file = vim.fn.expand('%:p')
-        vim.cmd('!' .. formatter_cmd .. ' "' .. current_file .. '"')
-        return
+    for _, client in ipairs(clients) do
+      if client.name == 'ruff' or client.name == 'pyright' then
+        has_ruff = true
+        break
       end
     end
     
-    vim.notify('No Python formatter available', vim.log.levels.WARN)
+    if has_ruff then
+      vim.lsp.buf.format({
+        async = false,
+        filter = function(client)
+          return client.name == 'ruff' or client.name == 'pyright'
+        end
+      })
+      return
+    end
   end
+  
+  -- 如果LSP不可用，尝试使用conform.nvim
+  local ok, conform = pcall(require, 'conform')
+  if ok then
+    conform.format({ async = false, lsp_fallback = true })
+    return
+  end
+  
+  -- 最后的备选方案：尝试使用外部格式化工具
+  local python_cmd = detect_python_env()
+  local formatters = { 'ruff', 'autopep8', 'yapf', 'black' }
+  
+  -- Windows系统下使用python -m方式调用，避免路径中的空格问题
+  local is_windows = vim.fn.has('win32') == 1 or vim.fn.has('win64') == 1
+  local format_cmd = is_windows and (python_cmd .. ' -m ') or ''
+  
+  for _, formatter in ipairs(formatters) do
+    local formatter_cmd = is_windows and (format_cmd .. formatter) or python_cmd:gsub('python$', formatter)
+    if vim.fn.executable(is_windows and 'python' or formatter_cmd) == 1 then
+      local current_file = vim.fn.expand('%:p')
+      local cmd = is_windows and (format_cmd .. formatter .. ' "' .. current_file .. '"') or (formatter_cmd .. ' "' .. current_file .. '"')
+      vim.cmd('!' .. cmd)
+      return
+    end
+  end
+  
+  vim.notify('No Python formatter available. Install ruff: pip install ruff', vim.log.levels.WARN)
 end
 
 -- 运行Python测试

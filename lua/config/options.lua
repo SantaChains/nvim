@@ -60,6 +60,8 @@ opt.signcolumn = "yes" -- 确保签名列始终显示
 
 opt.termguicolors = true
 opt.signcolumn = "yes"
+opt.fileencodings = "utf-8,gbk"
+-- opts.rocks.hererocks = true --错误设置
 
 --------------------------------------------
 
@@ -73,6 +75,8 @@ vim.g.loaded_python3_provider = 0
 --------------------------------------------
 
 -- 体验 & 性能（优化部分参数）
+vim.o.ttyfast = true
+
 opt.updatetime = 100
 opt.timeoutlen = 300
 opt.ttimeoutlen = 10

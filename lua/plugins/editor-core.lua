@@ -5,10 +5,14 @@ return {
   -- 文本环绕操作 - 核心编辑功能
   {
     'kylechui/nvim-surround',
-    version = '^3.0.0',
+    -- version = '^3.0.0',
     event = { 'BufReadPost', 'BufNewFile' },
     config = function()
-      require('nvim-surround').setup({
+      local safe_require = require('utils.safe_require')
+      local surround = safe_require.safe_require('nvim-surround')
+      if not surround then return end
+      
+      surround.setup({
         surrounds = {
           -- 自定义 Markdown 链接环绕
           ['y'] = {
@@ -31,20 +35,68 @@ return {
     lazy = false,
     keys = {
       -- 窗口导航
-      { '<C-h>', function() require('smart-splits').move_cursor_left() end, desc = 'Move to left window' },
-      { '<C-j>', function() require('smart-splits').move_cursor_down() end, desc = 'Move to down window' },
-      { '<C-k>', function() require('smart-splits').move_cursor_up() end, desc = 'Move to up window' },
-      { '<C-l>', function() require('smart-splits').move_cursor_right() end, desc = 'Move to right window' },
+      { '<C-h>', function() 
+        local safe_require = require('utils.safe_require')
+        local splits = safe_require.safe_require('smart-splits')
+        if splits then splits.move_cursor_left() end
+      end, desc = 'Move to left window' },
+      { '<C-j>', function() 
+        local safe_require = require('utils.safe_require')
+        local splits = safe_require.safe_require('smart-splits')
+        if splits then splits.move_cursor_down() end
+      end, desc = 'Move to down window' },
+      { '<C-k>', function() 
+        local safe_require = require('utils.safe_require')
+        local splits = safe_require.safe_require('smart-splits')
+        if splits then splits.move_cursor_up() end
+      end, desc = 'Move to up window' },
+      { '<C-l>', function() 
+        local safe_require = require('utils.safe_require')
+        local splits = safe_require.safe_require('smart-splits')
+        if splits then splits.move_cursor_right() end
+      end, desc = 'Move to right window' },
       -- 窗口大小调整
-      { '<A-h>', function() require('smart-splits').resize_left() end, desc = 'Resize left' },
-      { '<A-j>', function() require('smart-splits').resize_down() end, desc = 'Resize down' },
-      { '<A-k>', function() require('smart-splits').resize_up() end, desc = 'Resize up' },
-      { '<A-l>', function() require('smart-splits').resize_right() end, desc = 'Resize right' },
+      { '<A-h>', function() 
+        local safe_require = require('utils.safe_require')
+        local splits = safe_require.safe_require('smart-splits')
+        if splits then splits.resize_left() end
+      end, desc = 'Resize left' },
+      { '<A-j>', function() 
+        local safe_require = require('utils.safe_require')
+        local splits = safe_require.safe_require('smart-splits')
+        if splits then splits.resize_down() end
+      end, desc = 'Resize down' },
+      { '<A-k>', function() 
+        local safe_require = require('utils.safe_require')
+        local splits = safe_require.safe_require('smart-splits')
+        if splits then splits.resize_up() end
+      end, desc = 'Resize up' },
+      { '<A-l>', function() 
+        local safe_require = require('utils.safe_require')
+        local splits = safe_require.safe_require('smart-splits')
+        if splits then splits.resize_right() end
+      end, desc = 'Resize right' },
       -- 窗口交换
-      { '<leader><C-h>', function() require('smart-splits').swap_buf_left() end, desc = 'Swap buffer left' },
-      { '<leader><C-j>', function() require('smart-splits').swap_buf_down() end, desc = 'Swap buffer down' },
-      { '<leader><C-k>', function() require('smart-splits').swap_buf_up() end, desc = 'Swap buffer up' },
-      { '<leader><C-l>', function() require('smart-splits').swap_buf_right() end, desc = 'Swap buffer right' },
+      { '<leader><C-h>', function() 
+        local safe_require = require('utils.safe_require')
+        local splits = safe_require.safe_require('smart-splits')
+        if splits then splits.swap_buf_left() end
+      end, desc = 'Swap buffer left' },
+      { '<leader><C-j>', function() 
+        local safe_require = require('utils.safe_require')
+        local splits = safe_require.safe_require('smart-splits')
+        if splits then splits.swap_buf_down() end
+      end, desc = 'Swap buffer down' },
+      { '<leader><C-k>', function() 
+        local safe_require = require('utils.safe_require')
+        local splits = safe_require.safe_require('smart-splits')
+        if splits then splits.swap_buf_up() end
+      end, desc = 'Swap buffer up' },
+      { '<leader><C-l>', function() 
+        local safe_require = require('utils.safe_require')
+        local splits = safe_require.safe_require('smart-splits')
+        if splits then splits.swap_buf_right() end
+      end, desc = 'Swap buffer right' },
     },
     opts = {
       ignored_filetypes = { 'nofile', 'quickfix', 'prompt' },
@@ -116,20 +168,41 @@ return {
   {
     'gbprod/substitute.nvim',
     keys = {
-      { 's', mode = { 'n', 'x' }, desc = 'Substitute' },
-      { 'ss', mode = 'n', desc = 'Substitute line' },
-      { 'S', mode = 'n', desc = 'Substitute until end of line' },
-      { '<leader>sr', '<CMD>lua require("substitute.range").operator()<CR>', desc = 'Substitute range' },
+      { 's', mode = { 'n', 'x' }, function()
+        local safe_require = require('utils.safe_require')
+        local substitute = safe_require.safe_require('substitute')
+        if substitute then substitute.operator() end
+      end, desc = 'Substitute' },
+      { 'ss', mode = 'n', function()
+        local safe_require = require('utils.safe_require')
+        local substitute = safe_require.safe_require('substitute')
+        if substitute then substitute.line() end
+      end, desc = 'Substitute line' },
+      { 'S', mode = 'n', function()
+        local safe_require = require('utils.safe_require')
+        local substitute = safe_require.safe_require('substitute')
+        if substitute then substitute.eol() end
+      end, desc = 'Substitute until end of line' },
+      { '<leader>sr', function()
+        local safe_require = require('utils.safe_require')
+        local substitute_range = safe_require.safe_require('substitute.range')
+        if substitute_range then substitute_range.operator() end
+      end, desc = 'Substitute range' },
     },
-    opts = {
-      on_substitute = nil,
-      yank_substituted_text = false,
-      preserve_cursor_position = false,
-      modifiers = nil,
-      highlight_substituted_text = {
-        enabled = true,
-        timer = 500,
-      },
+    config = function()
+      local safe_require = require('utils.safe_require')
+      local substitute = safe_require.safe_require('substitute')
+      if not substitute then return end
+      
+      substitute.setup({
+        on_substitute = nil,
+        yank_substituted_text = false,
+        preserve_cursor_position = false,
+        modifiers = nil,
+        highlight_substituted_text = {
+          enabled = true,
+          timer = 500,
+        },
       range = {
         prefix = 's',
         prompt_current_text = false,
@@ -137,14 +210,15 @@ return {
         complete_word = false,
         subject = nil,
         range = nil,
-        suffix = '',
-      },
-      exchange = {
-        motion = false,
-        use_esc_to_cancel = true,
-        preserve_cursor_position = false,
-        modifiers = nil,
-      },
-    },
+          suffix = '',
+        },
+        exchange = {
+          motion = false,
+          use_esc_to_cancel = true,
+          preserve_cursor_position = false,
+          modifiers = nil,
+        },
+      })
+    end,
   },
 }

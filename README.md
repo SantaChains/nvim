@@ -459,6 +459,9 @@ autocmd("BufWritePre", {
 - `:TSStatus` - 显示解析器状态
 - `:TSInstallLatex` - 安装 LaTeX 解析器
 - `:TSHealth` - 检查 Treesitter 健康状态
+- `:TSFixLatex` - 修复 LaTeX 解析器问题（Windows 11 专用）
+- `:TSFixParser [语言]` - 修复指定语言的解析器
+- `:TSCheckParsers` - 检查所有解析器状态
 
 ### 键位检查
 - `:ShowAllKeymaps` - 显示所有键位映射
@@ -565,11 +568,19 @@ autocmd("BufWritePre", {
    :checkhealth blink
    ```
 
-5. **Windows 特定问题**
+5. **LaTeX 数学表达式不渲染**
+   ```vim
+   :TSInstall latex    " 安装 LaTeX 解析器
+   :TSCheckLatex       " 检查 LaTeX 配置
+   ```
+
+6. **Windows 特定问题**
    ```vim
    :checkhealth provider
    ```
    检查 PowerShell 和系统工具是否正常
+
+
 
 ### Windows 11 特殊配置
 
